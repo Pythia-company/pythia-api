@@ -31,13 +31,17 @@
                 "type": "hex",
                 "default": null
             },
-            "answerChoices": {
+            "options": {
                 "type": "array[string]"
                 "default": null
             },
             "resolved": {
                 "type": "bool",
                 "default": false
+            },
+            "answer": {
+                "type": int,
+                "default": null
             },
             "users": {
                 "type": "array",
@@ -91,6 +95,18 @@
         "type": "date"
         "default": null
     },
+    "subcriptionInitDate": {
+        "type": "date"
+        "default": null
+    },
+    "nextSubcriptionPayDate": {
+        "type": "date"
+        "default": null
+    },
+    "subscriptionAmountDue": {
+        "type": "float",
+        "default": null
+    },
     "markets": {
         "type": "array",
         "properties": [
@@ -119,6 +135,34 @@
                 "default": 0
             }
         ]
+    }
+}
+```
+
+## Reputation tokens
+```javascript
+{   "schema": "Tokens",
+    "address": {
+        "type": "hex",
+        "default": null
+    },
+    "topic":  {
+        "type": "string",
+        "default": null
+    }
+}
+```
+
+## Subscription
+```javascript
+{   "schema": "Subscription",
+    "address": {
+        "type": "hex",
+        "default": null
+    },
+    "description":  {
+        "type": "string",
+        "default": null
     }
 }
 ```
@@ -330,4 +374,3 @@
 }
 
 ```
-
