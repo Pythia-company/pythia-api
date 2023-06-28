@@ -5,39 +5,32 @@
 ## Market: 
 ```javascript
     {
-        "schema": "market",
+        "schema": "markets",
         "properties": [
             "address": {
                 "type": "hex",
-                "default": null
             },
             "question":  {
                 "type": "string",
-                "default": null
             },
             "wageDeadline": {
-                "type": "date",
-                "default": null
+                "type": "date-time",
             }
             "resolutionDate": {
-                "type": "date",
-                "default": null
+                "type": "date-time",
             },
             "topic":  {
                 "type": "string",
-                "default": null
             },
             "reputationTokenAddress": {
                 "type": "hex",
-                "default": null
             },
             "options": {
                 "type": "array[string]"
-                "default": null
             },
-            "resolved": {
-                "type": "bool",
-                "default": false
+            "status": {
+                "type": "string",
+                "enum": ["inprogress", "unresolved", "resolved"]
             },
             "answer": {
                 "type": int,
@@ -78,7 +71,7 @@
 
 ## User
 ```javascript
-{   "schema": "user",
+{   "schema": "users",
     "address": {
         "type": "hex",
         "default": null
@@ -141,7 +134,7 @@
 
 ## Reputation tokens
 ```javascript
-{   "schema": "Tokens",
+{   "schema": "tokens",
     "address": {
         "type": "hex",
         "default": null
@@ -155,7 +148,7 @@
 
 ## Subscription
 ```javascript
-{   "schema": "Subscription",
+{   "schema": "subscriptions",
     "address": {
         "type": "hex",
         "default": null
