@@ -129,8 +129,6 @@ get:
                                 address: bool
                                 description: whether user has predicted for this market
 ```
-## Примеры
-
 ### Request
 ```
 https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01:00:00.000Z&limit=10&sort[numOfPredictors]=desc
@@ -231,8 +229,6 @@ get:
                                 default: null
                                 description: users description for this market
 ```
-## Примеры
-
 ### Request
 ```
 https://api.pythia.company/markets/0x1?predictions=10&user=0x2
@@ -326,8 +322,6 @@ get:
                         accuracy: float
                         reputation: float
 ```
-## Примеры
-
 ### Request
 ```
 https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
@@ -414,8 +408,6 @@ get:
                                     default: null
                             
 ```
-## Примеры
-
 ### Request
 ```
 https://api.pythia.company/users/0x1?predictionDatetime=2023-04-01T01:00:00.000Z/statuses[]=resolved
