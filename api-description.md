@@ -15,7 +15,7 @@ servers:
     url: https://api.pythia.company/
 ```
 
-## 1. /markets
+## /markets
 ```yaml
 get: 
     summary: available markets
@@ -162,7 +162,7 @@ https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01
 ]
 ```
 
-## 1. /markets/{address}
+## /markets/{address}
 ```yaml
 get: 
     summary: information about the market
@@ -273,7 +273,7 @@ https://api.pythia.company/markets/0x1?predictions=10&user=0x2
 ```
 
 
-## 1. /users
+## /users
 ```yaml
 get: 
     summary: users
@@ -350,7 +350,7 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
 
 ```
 
-## 1. /users/{address}
+## /users/{address}
 ```yaml
 get: 
     summary: user info
