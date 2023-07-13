@@ -1,23 +1,16 @@
-
-
-
-# Описание эндпоинтов api по стандарту openapi: 3.0.1
-
-
-```yaml
 openapi: 3.0.1
 info:
   version: "1.0.0"
   title: Pythia-API
   description: Pythia API
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/antonkravchenko2001/pythia-api/1.0.0
   - description: Pythia application
     url: https://api.pythia.company/
-```
-
-## /markets
-```yaml
-/markets:
+paths:
+  /markets:
     get: 
       summary: available markets
       description: returns list of markets available for prediction
@@ -135,36 +128,8 @@ servers:
                       properties:
                         address: 
                           type: boolean
-```
-### Request
-```
-https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01:00:00.000Z&limit=10&sort[numOfPredictors]=desc
-```
-### Response
-```javascript
-[
-    {
-        "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-        "question": "will btc/usd exceed 40000$?"
-        "creationDatetime": "2023-04-01T01:00:00.000Z"
-        "wageDeadline": "2023-08-01T01:00:00.000Z"
-        "resolutionDate": "2023-07-10T01:00:00.000Z"
-        "topic": "trading"
-        "reputationTokenAddress": "0x1"
-        "options": ["No", "Yes"]
-        "status": "inprogress"
-        "answer": null
-        "numOfPredictors": 1000      
-        "userInfo": {
-            "0x4": false
-        }
-    }
-]
-```
 
-## /markets/{address}
-```yaml
-/markets/{address}:
+  /markets/{address}:
     get: 
       summary: information about the market
       description: returns list of markets available for prediction
@@ -242,42 +207,7 @@ https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01
                         type: string
                         default: null
                         description: users description for this market
-```
-### Request
-```
-https://api.pythia.company/markets/0x1?predictions=10&user=0x2
-```
-### Response
-```javascript
-{
-    "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-    "question": "will btc/usd exceed 40000$?"
-    "creationDatetime": "2023-04-01T01:00:00.000Z"
-    "wageDeadline": "2023-08-01T01:00:00.000Z"
-    "resolutionDate": "2023-07-10T01:00:00.000Z"
-    "topic": "trading"
-    "reputationTokenAddress": "0x1"
-    "options": ["No", "Yes"]
-    "status": "inprogress"
-    "answer": null
-    "numOfPredictors": 1000      
-    "predictions": [
-        {
-            "0x1": "0x567"
-        }
-    ]
-    "user": {
-        "address": "0x2",
-        "encodedPredicion": "0x445646"
-    }
-
-}
-```
-
-
-## /users
-```yaml
-/users:
+  /users:
     get: 
       summary: users
       description: returns users
@@ -331,27 +261,7 @@ https://api.pythia.company/markets/0x1?predictions=10&user=0x2
                       type: number
                     reputation:
                       type: number
-```
-### Request
-```
-https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
-```
-### Response
-```javascript
-[
-    {
-        "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-        "registrationDatetime": "2023-04-01T01:00:00.000Z"
-        "accuracy": 0.8,
-        "reputation": 10.1
-    }
-]
-
-```
-
-## /users/{address}
-```yaml
-/users/{address}:
+  /users/{address}:
     get: 
       summary: user info
       description: returns user's information
@@ -419,36 +329,3 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
                           type: number
                           description: amout of reputation user received for this market
                           default: null
-```
-### Request
-```
-https://api.pythia.company/users/0x1?predictionDatetime=2023-04-01T01:00:00.000Z/statuses[]=resolved
-```
-### Response
-```javascript
-{
-    "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-    "registrationDatetime": "2023-04-01T01:00:00.000Z"
-    "accuracy": 0.8,
-    "reputation": 10.1
-    "markets": [
-        {
-            "address": "0x2",
-            "status": "resolved",
-            "predictionDatetime": "2023-04-01T01:00:00.000Z",
-            "correct": true,
-            "reputation": 10.1
-        },
-        {
-            "address": "0x3",
-            "status": "resolved",
-            "predictionDatetime": "2023-05-01T01:00:00.000Z",
-            "correct": false,
-            "reputation": 0
-        }
-    ]
-}
-```
-
-
-
