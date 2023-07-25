@@ -317,6 +317,8 @@ paths:
                       properties:
                         address:
                           type: string
+                        question:
+                          type: string
                         status:
                           type: string
                         predictionDatetime:

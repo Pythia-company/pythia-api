@@ -14,10 +14,10 @@
                 "type": "string",
             },
             "wageDeadline": {
-                "type": "date-time",
+                "type": "integer",
             }
             "resolutionDate": {
-                "type": "date-time",
+                "type": "integer",
             },
             "topic":  {
                 "type": "string",
@@ -44,7 +44,7 @@
                         "default": null
                     },
                     "predictionDateTime": {
-                        "type": "datetime",
+                        "type": "integer",
                         "default": null,
                     },
                     "encodedPrediction": {
@@ -56,7 +56,7 @@
                         "default": null,
                     },
                     "reputationCollectionDateTime": {
-                        "type": "datetime",
+                        "type": "integer",
                         "default": null,
                     },
                     "reputation": {
@@ -85,15 +85,15 @@
         "default": "0"
     },
     "registrationDate": {
-        "type": "date"
+        "type": "integer"
         "default": null
     },
     "subcriptionInitDate": {
-        "type": "date"
+        "type": "integer"
         "default": null
     },
     "nextSubcriptionPayDate": {
-        "type": "date"
+        "type": "integer"
         "default": null
     },
     "subscriptionAmountDue": {
@@ -108,7 +108,7 @@
                 "default": null
             },
             "predictionDateTime": {
-                "type": "datetime",
+                "type": "integer",
                 "default": null,
             },
             "encodedPrediction": {
@@ -120,7 +120,7 @@
                 "default": null,
             },
             "reputationCollectionDateTime": {
-                "type": "datetime",
+                "type": "integer",
                 "default": null,
             },
             "reputation": {
