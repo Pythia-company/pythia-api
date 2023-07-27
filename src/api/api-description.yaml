@@ -1,0 +1,426 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0-oas3
+  title: Pythia-API
+  description: Pythia API
+servers:
+  - description: Pythia api
+    url: https://api.pythia.company/
+paths:
+  /markets:
+    get:
+      summary: available markets
+      description: returns list of markets available for prediction
+      parameters:
+        - name: topics
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [nft, defi, trading]
+            default: ['nft', 'defi', 'trading']
+            description: market topics
+        - name: createdAfter
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: filter on date when market was created
+        - name: wageDeadlineAfter
+          in: query
+          required: false
+          schema:
+            type: string
+            description: filter on date when the prediction deadline for the market
+        - name: resolvesAfter
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - inprogress
+              - unresolved
+              - resolved
+            description: status of the market
+        - name: questionPattern
+          in: query
+          required: false
+          schema:
+            type: string
+            description: question pattern (used in search form)
+        - name: address
+          in: query
+          required: false
+          schema:
+            type: string
+            description: user address
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: object
+            properties:
+              wageDeadline:
+                type: string
+                enum:
+                  - asc
+                  - desc
+                default: asc
+              resolutionDate:
+                type: string
+                enum:
+                  - asc
+                  - desc
+                default: asc
+              numOfPredictors:
+                type: string
+                enum:
+                  - asc
+                  - desc
+                default: asc
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of markets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                    question:
+                      type: string
+                    creationDatetime:
+                      type: integer
+                    wageDeadline:
+                      type: integer
+                    resolutionDate:
+                      type: integer
+                    topic:
+                      type: string
+                    reputationTokenAddress:
+                      type: string
+                    options:
+                      type: array
+                      items:
+                        type: string
+                    status:
+                      type: string
+                      enum:
+                        - inprogress
+                        - unresolved
+                        - resolved
+                      default: inprogress
+                    answer:
+                      type: string
+                      default: null
+                    numOfPredictors:
+                      type: integer
+                    userInfo:
+                      type: object
+                      default: null
+                      properties:
+                        address:
+                          type: boolean
+  /markets/{marketAddress}:
+    get:
+      summary: information about the market
+      description: returns list of markets available for prediction
+      parameters:
+        - name: marketAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: address of the market
+      responses:
+        '200':
+          description: info about the market
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  question:
+                    type: string
+                  creationDatetime:
+                    type: integer
+                  wageDeadline:
+                    type: string
+                  resolutionDate:
+                    type: integer
+                  topic:
+                    type: string
+                  reputationTokenAddress:
+                    type: string
+                  options:
+                    type: array
+                    items:
+                      type: string
+                  status:
+                    type: string
+                    enum:
+                      - inprogress
+                      - unresolved
+                      - resolved
+                    default: inprogress
+                  answer:
+                    type: string
+                    default: null
+                  numOfPredictors:
+                    type: integer
+  /markets/{marketAddress}/users/:
+    get:
+        summary: information about users in the market
+        description: returns the list of users with predictions for this market
+        parameters:
+          - name: marketAddress
+            in: path
+            required: true
+            schema:
+              type: string
+              description: address of the market
+          - name: order 
+            in: query
+            required: false
+            schema:
+              type: string
+              enum: ["asc", "desc"]
+          - name: offset
+            in: query
+            required: false
+            schema:
+              type: integer
+              default: 0
+          - name: limit
+            in: query
+            required: false
+            schema: 
+              type: integer
+              default: 10
+        responses:
+          '200':
+            description: predictions for the market
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items: 
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                        description: address of the user
+                      predictionDatetime:
+                        type: integer
+                        description: timestamp of prediction
+                      encodedPrediction:
+                        type: string
+                        description: encoded version of prediction
+                      reputationCollectionDateTime:
+                        type: integer
+                        description: when user disclosed the prediction
+                        default: null
+                      decodedPrediction:
+                        type: string
+                        default: null
+                      reputation:
+                        type: integer
+                        default: null
+  /users/{userAddress}:
+    get:
+      summary: user info
+      description: returns user's information
+      parameters:
+        - name: userAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: user address
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    description: user's address
+                  description:
+                    type: string
+                  status:
+                    type: string
+                    enum: ["trial", "subscribed", "unsubscribed"]
+                  registrationDatetime:
+                    type: integer
+                    description: date when user registered
+                  nextSubcriptionPayDate":
+                    type: integer
+                    default: null
+                    description: next date to pay subscription
+                  subscriptionAmountDue:
+                    type: number
+                    default: null
+                    description: subscription amount due
+  /users/{userAddress}/markets:
+    get:
+      summary: gets markets for the user
+      description: gets list of markets where user participated
+      parameters:
+        - name: userAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: user address
+        - name: resolved
+          in: query
+          required: false
+          schema:
+            type: boolean
+            description: only return resolved markets
+        - name: predictionDatetime
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: get markets with prediction date after a cirtain date
+        - name: receivedReward
+          in: query
+          required: false
+          schema:
+            type: boolean
+            description: only return markets where user collected reward
+        - name: order
+          in: query
+          required: false
+          schema: 
+            type: string
+            default: asc
+            enum: [asc, desc]
+            description: sort by predictionDatetime
+        - name: offset
+          in: query
+          required: false
+          schema: 
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema: 
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: user's markets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    address:
+                      type: string
+                    question:
+                      type: string
+                    creationDatetime:
+                      type: integer
+                    wageDeadline:
+                      type: string
+                    resolutionDate:
+                      type: integer
+                    topic:
+                      type: string
+                    reputationTokenAddress:
+                      type: string
+                    options:
+                      type: array
+                      items:
+                        type: string
+                    status:
+                      type: string
+                      enum: [inprogress, unresolved, resolved]
+                    answer:
+                      type: string
+                    reputation:
+                      type: integer
+                      description: reputation recieved by the user
+                    correct:
+                      type: boolean
+                      description: weather user was correct
+  /users/{userAddress}/markets/{marketAddress}:
+    get:
+      summary: gets markets for the user
+      description: gets list of markets where user participated
+      parameters:
+        - name: userAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: user address
+        - name: marketAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: market address
+      responses:
+        '200':
+          description: user's prediction for the market
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  predicted:
+                    type: boolean
+                    description: predicted
+                  predictionDatetime:
+                    type: integer
+                    default: null
+                    description: timestamp of prediction
+                  encodedPrediction:
+                    type: string
+                    default: null
+                    description: encoded version of prediction
+                  reputationCollectionDateTime:
+                    type: integer
+                    default: null
+                    description: when user disclosed the prediction
+                  decodedPrediction:
+                    type: string
+                    default: null
+                  reputation:
+                    type: integer
+                    default: null
+                  correct:
+                    type: boolean
+                    default: null
