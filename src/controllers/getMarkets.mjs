@@ -121,5 +121,4 @@ export const getMarkets = async(db, params) => {
             ]
         )
         .toArray()
-    
 }

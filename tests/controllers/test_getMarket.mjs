@@ -1,8 +1,8 @@
 import chai, { expect } from "chai";
 import { dbTest as db} from "../../src/models/mongo_setup.mjs";
 import { 
-    getMarkets
-} from "../../src/controllers/getMarkets.mjs";
+    getMarket
+} from "../../src/controllers/getMarket.mjs";
 
 describe('testing /markets  controller', async function() {
 
@@ -54,10 +54,10 @@ describe('testing /markets  controller', async function() {
 
         await markets.insertOne(marketParams);
         const params = {
-            "createdAfter": 1e5,
+            "address": "0x",
         }
         const results = (
-            await getMarkets(
+            await getMarket(
                 db,
                 params
             )
