@@ -55,12 +55,6 @@ paths:
           schema:
             type: string
             description: question pattern (used in search form)
-        - name: address
-          in: query
-          required: false
-          schema:
-            type: string
-            description: user address
         - name: sort
           in: query
           required: false
@@ -137,12 +131,6 @@ paths:
                       default: null
                     numOfPredictors:
                       type: integer
-                    userInfo:
-                      type: object
-                      default: null
-                      properties:
-                        address:
-                          type: boolean
   /markets/{marketAddress}:
     get:
       summary: information about the market
