@@ -54,7 +54,7 @@ describe('testing /markets  controller', async function() {
 
         await markets.insertOne(marketParams);
         const params = {
-            "address": "0x",
+            "marketAddress": "0x",
         }
         const results = (
             await getMarket(

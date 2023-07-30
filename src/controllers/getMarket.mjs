@@ -4,7 +4,7 @@ export const getMarket = async(db, params) => {
     const aggregateParams = [
         {
             $match: {
-                address: params.address
+                address: params.marketAddress
             }
         },
         {
