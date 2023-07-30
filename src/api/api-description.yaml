@@ -293,12 +293,6 @@ paths:
           schema:
             type: boolean
             description: only return resolved markets
-        - name: predictionDatetime
-          in: query
-          required: false
-          schema:
-            type: integer
-            description: get markets with prediction date after a cirtain date
         - name: receivedReward
           in: query
           required: false
