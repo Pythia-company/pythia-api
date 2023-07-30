@@ -75,7 +75,12 @@ export const getUserMarkets = async(db, params) => {
                 },
                 correct: {
                     $cond: {
-                        if: {$eq:["$markets.decodedPrediction", "$markets.answer"]},
+                        if: {
+                            $and: [
+                                {$eq:["$markets.decodedPrediction", "$markets.answer"]},
+                                { $ifNull: ['$markets.decodedPrediction', false]}
+                            ]
+                        },
                         then: true,
                         else: false
                     },

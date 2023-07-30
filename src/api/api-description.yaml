@@ -382,9 +382,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  predicted:
-                    type: boolean
-                    description: predicted
                   predictionDatetime:
                     type: integer
                     default: null
