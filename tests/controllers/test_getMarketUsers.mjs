@@ -77,8 +77,15 @@ describe('testing /markets  controller', async function() {
                 db,
                 params
             )
-        );
-        console.log('results');
-        console.log(results);
+        )[0];
+        const fieldsToReturn = [
+            'address',
+            'predictionDatetime',
+            'encodedPrediction',
+            'reputationCollectionDateTime',
+            'decodedPrediction',
+            'reputation'
+        ]
+        expect(fieldsToReturn).to.eql(Object.keys(results));
     })
 })

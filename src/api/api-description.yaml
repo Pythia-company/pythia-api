@@ -268,7 +268,7 @@ paths:
                   registrationDatetime:
                     type: integer
                     description: date when user registered
-                  nextSubcriptionPayDate":
+                  nextSubcriptionPayDate:
                     type: integer
                     default: null
                     description: next date to pay subscription
