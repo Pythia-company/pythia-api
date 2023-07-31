@@ -238,6 +238,52 @@ paths:
                       reputation:
                         type: integer
                         default: null
+  /users:
+    get: 
+      summary: users
+      description: gets top users
+      parameters:
+        - name: topic
+          in: query
+          required: true
+          schema:
+            type: string
+            description: user address
+        - name: periodDays
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: number of days
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      description: user's address
+                    accuracy:
+                      type: number
+                    reputation:
+                      type: number
   /users/{userAddress}:
     get:
       summary: user info
@@ -276,6 +322,55 @@ paths:
                     type: number
                     default: null
                     description: subscription amount due
+  /users/stats/{userAddress}/:
+    get:
+      summary: user's stats
+      description: returns user's status
+      parameters:
+        - name: userAddress
+          in: path
+          required: true
+          schema:
+            type: string
+            description: user address
+        - name: topic
+          in: query
+          required: true
+          schema:
+            type: string
+            description: user address
+        - name: periodDays
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: number of days 
+      responses:
+        '200':
+          description: user's stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    description: user's address
+                  percentile:
+                    type: integer
+                  accuracy:
+                    type: string
+                  reputation:
+                    type: integer
+                    description: date when user registered
+                  chart:
+                    type: array
+                    items:
+                      properties: 
+                        key:
+                          type: integer
+                        value:
+                          type: number
   /users/{userAddress}/markets:
     get:
       summary: gets markets for the user
