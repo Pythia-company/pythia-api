@@ -95,27 +95,17 @@ describe('testing /users controller', async function() {
                 db,
                 params
             )
-        );
-        console.log("results");
-        console.log(JSON.stringify(results, null, 5));
+        )[0];
 
-        // // validating fields
-        // const fieldToReturn = [
-        //     "address",
-        //     "creationDatetime",
-        //     "wageDeadline",
-        //     "resolutionDate",
-        //     "status",
-        //     "topic",
-        //     "reputationTokenAddress",
-        //     "options",
-        //     "question",
-        //     "answer",
-        //     "numOfPredictors"
-        // ]
+        // validating fields
+        const fieldToReturn = [
+            "address",
+            "accuracy",
+            "reputation"
+        ]
 
-        // expect(fieldToReturn).to.eql(
-        //     Object.keys(results)
-        // )
+        expect(fieldToReturn).to.eql(
+            Object.keys(results)
+        )
     })
 })

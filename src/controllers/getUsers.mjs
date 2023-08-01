@@ -65,9 +65,6 @@ export const getUsers = async(db, params) => {
             $project: {
                 _id: 0,
                 address: 1,
-                reputation: {
-                    $sum: "$markets.reputation"
-                },
                 accuracy: {
                     $cond: {
                         if: {$eq: ["$totalMarkets", 0]},
@@ -85,6 +82,9 @@ export const getUsers = async(db, params) => {
                             ]
                         }
                     }
+                },
+                reputation: {
+                    $sum: "$markets.reputation"
                 },
             }
         },
