@@ -27,7 +27,7 @@ marketRouter.get('/markets/:marketAddress', async (req, res) => {
   const marketAddress = req.params.marketAddress; 
   const queryParams = req.query;
   queryParams['marketAddress'] = marketAddress;
-  const responseData = await getMarkets(db, queryParams);
+  const responseData = await getMarket(db, queryParams);
   res.send(responseData);
 });
 
