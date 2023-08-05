@@ -345,6 +345,7 @@ paths:
           schema:
             type: integer
             description: number of days 
+            default: 180
       responses:
         '200':
           description: user's stats

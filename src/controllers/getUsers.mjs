@@ -17,6 +17,10 @@ export const getUsers = async(db, params) => {
         $gt: ["$$markets.reputation", 0]
     }
 
+    const resolvedCondition = {
+        $eq: ["$$markets.resolved", true]
+    }
+
     const aggregateQuery =  [
         {
             $addFields: {
@@ -27,7 +31,8 @@ export const getUsers = async(db, params) => {
                         cond: {
                             $and: [
                                 dateCondition,
-                                reputationCondition
+                                reputationCondition,
+                                resolvedCondition
                             ]
                         }
                     }
@@ -39,7 +44,8 @@ export const getUsers = async(db, params) => {
                             as: "markets",
                             cond: {
                                 $and: [
-                                    dateCondition
+                                    dateCondition,
+                                    resolvedCondition
                                 ]
                             }
                         }
@@ -53,7 +59,8 @@ export const getUsers = async(db, params) => {
                             cond: {
                                 $and: [
                                     dateCondition,
-                                    reputationCondition
+                                    reputationCondition,
+                                    resolvedCondition
                                 ]
                             }
                         }

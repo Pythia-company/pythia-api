@@ -1,10 +1,8 @@
 import chai, { expect } from "chai";
 import { dbTest as db} from "../../src/models/mongo_setup.mjs";
-import { 
-    getUsers
-} from "../../src/controllers/getUsers.mjs";
+import { getUserStats } from "../../src/controllers/getUserStats.mjs";
 
-describe('testing /users controller', async function() {
+describe('testing /users/stats controller', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");
@@ -34,7 +32,7 @@ describe('testing /users controller', async function() {
                     "address": "0x1",
                     "resolutionDate": (
                         Math.floor(Date.now() / 1000) - (
-                            30 *
+                            20 *
                             24 *
                             3600
                         )
@@ -92,24 +90,23 @@ describe('testing /users controller', async function() {
         await users.insertOne(userParams);
         const params = {
             "topic": "defi",
+            "userAddress": "0x"
             // "periodDays": 30
         }
         const results = (
-            await getUsers(
+            await getUserStats(
                 db,
                 params
             )
         );
-
-        // validating fields
-        const fieldToReturn = [
+        const fieldsToReturn = [
+            "reputation",
+            "totalPredictions",
             "address",
+            "percentile",
             "accuracy",
-            "reputation"
+            "chart"
         ]
-
-        expect(fieldToReturn).to.eql(
-            Object.keys(results[0])
-        )
+        expect(Object.keys(results)).to.eql(fieldsToReturn)
     })
 })
