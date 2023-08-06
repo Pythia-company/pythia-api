@@ -1,8 +1,8 @@
 import chai, { expect } from "chai";
-import { dbTest as db} from "../../src/models/mongo_setup.mjs";
-import { getUserStats } from "../../src/controllers/getUserStats.mjs";
+import { dbTest as db} from "../../src/models/mongo_setup.js";
+import { getUserStats } from "../../src/models/getUserStats.js";
 
-describe('testing /users/stats controller', async function() {
+describe('testing /users/stats model', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");

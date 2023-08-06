@@ -1,70 +1,47 @@
-import {express} from "express";
+import express from "express";
 import {
-  getUser,
-} from "../controllers/getUser.mjs";
+  getUserController,
+} from "../controllers/getUserController.js";
 
 import {
-  getUsers
-} from "../controllers/getUsers.mjs";
+  getUsersController
+} from "../controllers/getUsersController.js";
 
 import {
-  getUserMarkets
-} from "../controllers/getUserMarkets.mjs";
+  getUserMarketsController
+} from "../controllers/getUserMarketsController.js";
 
 import {
-  getUserStats
-} from "../controllers/getUserStats.mjs";
+  getUserStatsController
+} from "../controllers/getUserStatsController.js";
 
 import {
-  getUserMarket
-} from "../controllers/getUserMarket.mjs";
-
-import {
-  db
-} from "../models/mongo_setup.mjs";
+  getUserMarketController
+} from "../controllers/getUserMarketController.js";
 
 export let userRouter = express.Router();
 
-userRouter.get('/users', async (req, res) => {
-  const responseData = await getUsers(db, req.query)
-  res.send(responseData);
+userRouter.get('/', async (req, res) => {
+  await getUsersController(req, res);
 });
 
 
-userRouter.get('/users/:userAddress', async (req, res) => {
-  const userAddress = req.params.userAddress; 
-  const queryParams = req.query;
-  queryParams['userAddress'] = userAddress;
-  const responseData = await getUsers(db, queryParams);
-  res.send(responseData);
+userRouter.get('/:userAddress', async (req, res) => {
+  await getUserController(req, res);
 });
 
-userRouter.get('/users/stats/:userAddress', async (req, res) => {
-  const userAddress = req.params.userAddress; 
-  const queryParams = req.query;
-  queryParams['userAddress'] = userAddress;
-  const responseData = await getUserStats(db, queryParams);
-  res.send(responseData);
+userRouter.get('/stats/:userAddress', async (req, res) => {
+  await getUserStatsController(req, res);
 });
 
 
-userRouter.get('/users/:userAddress/market/:marketAddress', async (req, res) => {
-  const userAddress = req.params.userAddress; 
-  const marketAddress = req.params.marketAddress; 
-  const queryParams = req.query;
-  queryParams['marketAddress'] = marketAddress;
-  queryParams['userAddress'] = userAddress;
-  const responseData = await getUserMarket(db, queryParams);
-  res.send(responseData);
+userRouter.get('/:userAddress/market/:marketAddress', async (req, res) => {
+  await getUserMarketController(req, res);
 });
 
 
-userRouter.get('/users/:userAddress/markets', async (req, res) => {
-  const userAddress = req.params.userAddress; 
-  const queryParams = req.query;
-  queryParams['userAddress'] = userAddress;
-  const responseData = await getUserMarkets(db, queryParams);
-  res.send(responseData);
+userRouter.get('/:userAddress/markets', async (req, res) => {
+  await getUserMarketsController(req, res);
 });
 
 

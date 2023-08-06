@@ -248,7 +248,7 @@ paths:
           required: true
           schema:
             type: string
-            description: user address
+            description: topic
         - name: periodDays
           in: query
           required: false

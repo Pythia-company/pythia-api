@@ -1,6 +1,6 @@
 import {
     transformSortParams
-} from "../utils/utils.mjs";
+} from "../utils/utils.js";
 
 export const getMarkets = async(db, params) => {
     const marketsCollection = await db.collection("markets");

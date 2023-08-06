@@ -1,10 +1,10 @@
 import chai, { expect } from "chai";
-import { dbTest as db} from "../../src/models/mongo_setup.mjs";
+import { dbTest as db} from "../../src/models/mongo_setup.js";
 import { 
-    getUserMarket
-} from "../../src/controllers/getUserMarket.mjs";
+    getUserMarkets
+} from "../../src/models/getUserMarkets.js";
 
-describe('testing /users/{userAddress}/market/{marketAddress}  controller', async function() {
+describe('testing /users/{userAddress}/markets model', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");
@@ -36,13 +36,11 @@ describe('testing /users/{userAddress}/market/{marketAddress}  controller', asyn
                     "address": "0x1",
                     "question": "question",
                     "creationDatetime": 1e6,
-                    "predictionDatetime": 1e6,
                     "wageDeadline": 1e6,
                     "resolutionDate": 1e6,
                     "topic": "topic",
                     "reputationTokenAddress": "0x3",
                     "status": "resolved",
-                    "encodedPrediction": "0x34",
                     "answer": 9,
                     "decodedPrediction": 8,
                     "reputaion": 9.1,
@@ -53,13 +51,11 @@ describe('testing /users/{userAddress}/market/{marketAddress}  controller', asyn
                     "question": "question",
                     "creationDatetime": 1e6,
                     "wageDeadline": 1e6,
-                    "predictionDatetime": 1e6,
                     "status": "unresolved",
                     "resolutionDate": 1e6,
                     "topic": "topic",
                     "reputationTokenAddress": "0x3",
                     "answer": null,
-                    "encodedPrediction": "0x34",
                     "decodedPrediction": null,
                     "reputaion": null,
                     "options": ["1", "2"]
@@ -71,19 +67,25 @@ describe('testing /users/{userAddress}/market/{marketAddress}  controller', asyn
         await users.insertOne(userParams);
         const params = {
             "userAddress": "0x",
-            "marketAddress": "0x2"
+            "resolved": true
         }
         const results = (
-            await getUserMarket(
+            await getUserMarkets(
                 db,
                 params
             )
-        );
+        )[0];
         const fieldsToReturn = [
-            'predictionDatetime',
-            'encodedPrediction',
-            'reputationCollectionDateTime',
-            'decodedPrediction',
+            'address',
+            'question',
+            'creationDatetime',
+            'wageDeadline',
+            'resolutionDate',
+            'topic',
+            'reputationTokenAddress',
+            'options',
+            'status',
+            'answer',
             'reputation',
             'correct'
         ]

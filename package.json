@@ -2,17 +2,22 @@
   "name": "pythia-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha 'tests/**/*.mjs' --recursive --timeout 60000 --exit"
+    "test": "mocha 'tests/**/*.js' --recursive --timeout 60000 --exit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.7",
-    "mocha": "^10.2.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mocha": "^10.2.0",
+    "mongodb": "^5.7.0"
   }
 }
