@@ -19,5 +19,5 @@ try {
   console.error(e);
 }
 
-export const db = conn.db("PythiaLogs");
+export const db = conn.db("pythia");
 export const dbTest = conn.db("PythiaLogs_Test")

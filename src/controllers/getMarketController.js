@@ -4,6 +4,8 @@ import {
 } from "../models/mongo_setup.js";
 import Joi from "joi";
 
+import {logger} from "../logger.js";
+
 export const validateFields = async (params) => {
     const schema =  Joi.object({
         marketAddress: Joi.string().regex(
@@ -25,10 +27,11 @@ export const getMarketController = async(req, res) => {
         'marketAddress': req.params.marketAddress
     };
     if(validateFields(params)){
-        output = await getMarket(
+        const output = await getMarket(
             db,
             params
         );
+        logger.info(`output: ${output}`);
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

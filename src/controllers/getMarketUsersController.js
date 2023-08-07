@@ -27,7 +27,7 @@ export const getMarketUsersController = async(req, res) => {
     const params = req.query;
     params['marketAddress'] = req.params.marketAddress;
     if(validateFields(params)){
-        output = await getMarketUsers(db, params);
+        const output = await getMarketUsers(db, params);
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

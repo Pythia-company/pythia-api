@@ -1,8 +1,8 @@
 import chai, { expect } from "chai";
-import { dbTest as db} from "../../src/models/mongo_setup.js";
+import { dbTest as db} from "../../../src/models/mongo_setup.js";
 import { 
     getUserMarkets
-} from "../../src/models/getUserMarkets.js";
+} from "../../../src/models/getUserMarkets.js";
 
 describe('testing /users/{userAddress}/markets model', async function() {
 

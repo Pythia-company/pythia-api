@@ -29,7 +29,7 @@ export const getUserStatsController = async(req, res) => {
     params["userAddress"] = req.params.userAddress;
 
     if(validateFields(params)){
-        output = await getUserStats(db, params);
+        const output = await getUserStats(db, params);
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

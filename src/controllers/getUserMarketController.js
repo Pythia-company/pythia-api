@@ -30,7 +30,7 @@ export const getUserMarketController = async(req, res) => {
     }
 
     if(validateFields(params)){
-        output = await getUserMarket(db, params);
+        const output = await getUserMarket(db, params);
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

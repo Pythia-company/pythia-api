@@ -26,7 +26,7 @@ export const validateFields = async (params) => {
 export const getUsersController = async(req, res) => {
     const params = req.query;
     if(validateFields(params)){
-        output = await getUsers(db, params);
+        const soutput = await getUsers(db, params);
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

@@ -1,8 +1,10 @@
 import chai, { expect } from "chai";
-import { dbTest as db} from "../../src/models/mongo_setup.js";
-import { getUserStats } from "../../src/models/getUserStats.js";
+import { dbTest as db} from "../../../src/models/mongo_setup.js";
+import { 
+    getUsers
+} from "../../../src/models/getUsers.js";
 
-describe('testing /users/stats model', async function() {
+describe('testing /users model', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");
@@ -32,7 +34,7 @@ describe('testing /users/stats model', async function() {
                     "address": "0x1",
                     "resolutionDate": (
                         Math.floor(Date.now() / 1000) - (
-                            20 *
+                            30 *
                             24 *
                             3600
                         )
@@ -90,23 +92,24 @@ describe('testing /users/stats model', async function() {
         await users.insertOne(userParams);
         const params = {
             "topic": "defi",
-            "userAddress": "0x"
             // "periodDays": 30
         }
         const results = (
-            await getUserStats(
+            await getUsers(
                 db,
                 params
             )
         );
-        const fieldsToReturn = [
-            "reputation",
-            "totalPredictions",
+
+        // validating fields
+        const fieldToReturn = [
             "address",
-            "percentile",
             "accuracy",
-            "chart"
+            "reputation"
         ]
-        expect(Object.keys(results)).to.eql(fieldsToReturn)
+
+        expect(fieldToReturn).to.eql(
+            Object.keys(results[0])
+        )
     })
 })

@@ -1,31 +1,37 @@
-import { validateFields } from "../../src/controllers/getUserMarketsController.js";
+import { validateFields } from "../../../src/controllers/getUsersController.js";
 
 import chai, { expect } from "chai";
 
-describe('testing validateFields in getUserMarketsController', async function() {
+describe('testing validateFields in getUsersController', async function() {
 
     it('testing request validity', async function() {
         const validParams = {
-            "userAddress": '0x1'
+            "topic": 'defi',
+            "offset": 0,
+            "limit": 10
         }
 
         expect(await validateFields(validParams)).to.eq(true);
 
         const invalidParamsByField = {
             "topic": 'defi',
-            "order": -1
+            "offeset": 0,
+            "limit": 10
         }
 
         expect(await validateFields(invalidParamsByField)).to.eq(false);
 
         const invalidParamsByRequiredField = {
-            "topic": "defi",
+            "offeset": 0,
+            "limit": 10
         }
 
         expect(await validateFields(invalidParamsByRequiredField)).to.eq(false);
 
         const invalidParamsByFieldVal = {
-            "userAddress": 'abc'
+            "topic": "defi",
+            "offeset": -1,
+            "limit": 10
         }
 
         expect(await validateFields(invalidParamsByFieldVal)).to.eq(false);

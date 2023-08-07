@@ -1,8 +1,8 @@
-import { validateFields } from "../../src/controllers/getMarketUsersController.js";
+import { validateFields } from "../../../src/controllers/getMarketController.js";
 
 import chai, { expect } from "chai";
 
-describe('testing validateFields in getMarketUsersController', async function() {
+describe('testing validateFields in getMarketController', async function() {
 
     it('testing request validity', async function() {
         const validParams = {
@@ -18,7 +18,7 @@ describe('testing validateFields in getMarketUsersController', async function() 
         expect(await validateFields(invalidParamsByField)).to.eq(false);
 
         const invalidParamsByRequiredField = {
-            "order": "hello"
+            "marketAddress": "hello"
         }
 
         expect(await validateFields(invalidParamsByRequiredField)).to.eq(false);

@@ -1,4 +1,4 @@
-import { validateFields } from "../../src/controllers/getUserStatsController.js";
+import { validateFields } from "../../../src/controllers/getUserStatsController.js";
 
 import chai, { expect } from "chai";
 

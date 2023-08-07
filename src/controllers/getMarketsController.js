@@ -39,7 +39,7 @@ export const validateFields = async (params) => {
 export const getMarketsController = async(req, res) => {
     const params = req.query;
     if(validateFields(params)){
-        output = await getMarkets(
+        const output = await getMarkets(
             db,
             params
         );

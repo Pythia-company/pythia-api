@@ -38,8 +38,8 @@ export const getMarket = async(db, params) => {
             }
         }
     ]
-
-    return (
+    const output =  (
         await marketsCollection.aggregate(aggregateParams).toArray()
-    )
+    )[0]
+    return output
 }

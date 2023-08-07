@@ -1,10 +1,10 @@
 import chai, { expect } from "chai";
-import { dbTest as db} from "../../src/models/mongo_setup.js";
+import { dbTest as db} from "../../../src/models/mongo_setup.js";
 import { 
-    getMarkets
-} from "../../src/models/getMarkets.js";
+    getMarket
+} from "../../../src/models/getMarket.js";
 
-describe('testing /markets model', async function() {
+describe('testing /markets  model', async function() {
 
     beforeEach(async function () {
         const markets = await db.collection("markets");
@@ -54,10 +54,10 @@ describe('testing /markets model', async function() {
 
         await markets.insertOne(marketParams);
         const params = {
-            "createdAfter": 1e5,
+            "marketAddress": "0x",
         }
         const results = (
-            await getMarkets(
+            await getMarket(
                 db,
                 params
             )
