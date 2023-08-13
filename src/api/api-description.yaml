@@ -105,7 +105,7 @@ paths:
                       type: string
                     question:
                       type: string
-                    creationDatetime:
+                    creationDate:
                       type: integer
                     wageDeadline:
                       type: integer
@@ -154,7 +154,7 @@ paths:
                     type: string
                   question:
                     type: string
-                  creationDatetime:
+                  creationDate:
                     type: integer
                   wageDeadline:
                     type: string
@@ -222,13 +222,13 @@ paths:
                       address:
                         type: string
                         description: address of the user
-                      predictionDatetime:
+                      predictionDate:
                         type: integer
                         description: timestamp of prediction
                       encodedPrediction:
                         type: string
                         description: encoded version of prediction
-                      reputationCollectionDateTime:
+                      reputationCollectionDate:
                         type: integer
                         description: when user disclosed the prediction
                         default: null
@@ -311,7 +311,7 @@ paths:
                   status:
                     type: string
                     enum: ["trial", "subscribed", "unsubscribed"]
-                  registrationDatetime:
+                  registrationDate:
                     type: integer
                     description: date when user registered
                   nextSubcriptionPayDate:
@@ -402,7 +402,7 @@ paths:
             type: string
             default: asc
             enum: [asc, desc]
-            description: sort by predictionDatetime
+            description: sort by predictionDate
         - name: offset
           in: query
           required: false
@@ -428,7 +428,7 @@ paths:
                       type: string
                     question:
                       type: string
-                    creationDatetime:
+                    creationDate:
                       type: integer
                     wageDeadline:
                       type: string
@@ -478,7 +478,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  predictionDatetime:
+                  predictionDate:
                     type: integer
                     default: null
                     description: timestamp of prediction
@@ -486,7 +486,7 @@ paths:
                     type: string
                     default: null
                     description: encoded version of prediction
-                  reputationCollectionDateTime:
+                  reputationCollectionDate:
                     type: integer
                     default: null
                     description: when user disclosed the prediction

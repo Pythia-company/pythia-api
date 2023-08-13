@@ -48,12 +48,12 @@ export const getUserMarket = async(db, params) => {
             {
             $project: {
                     _id: 0,
-                    predictionDatetime: "$markets.predictionDatetime",
+                    predictionDate: "$markets.predictionDate",
                     encodedPrediction: "$markets.encodedPrediction",
-                    reputationCollectionDateTime: {
+                    reputationCollectionDate: {
                         $cond: {
-                            if: { $ifNull: ['$markets.reputationCollectionDateTime', false] },
-                            then: "$markets.reputationCollectionDateTime",
+                            if: { $ifNull: ['$markets.reputationCollectionDate', false] },
+                            then: "$markets.reputationCollectionDate",
                             else: null
                         },
                     },
@@ -92,9 +92,9 @@ export const getUserMarket = async(db, params) => {
 
      if(results.length === 0){
         return {
-            'predictionDatetime': null,
+            'predictionDate': null,
             'encodedPrediction': null,
-            'reputationCollectionDateTime': null,
+            'reputationCollectionDate': null,
             'decodedPrediction': null,
             'reputation': null,
             'correct': null

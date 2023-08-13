@@ -35,7 +35,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
                 {
                     "address": "0x1",
                     "question": "question",
-                    "creationDatetime": 1e6,
+                    "creationDate": 1e6,
                     "wageDeadline": 1e6,
                     "resolutionDate": 1e6,
                     "topic": "topic",
@@ -49,7 +49,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
                 {
                     "address": "0x2",
                     "question": "question",
-                    "creationDatetime": 1e6,
+                    "creationDate": 1e6,
                     "wageDeadline": 1e6,
                     "status": "unresolved",
                     "resolutionDate": 1e6,
@@ -78,7 +78,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
         const fieldsToReturn = [
             'address',
             'question',
-            'creationDatetime',
+            'creationDate',
             'wageDeadline',
             'resolutionDate',
             'topic',

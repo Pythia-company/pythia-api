@@ -29,7 +29,7 @@ describe('testing /markets  model', async function() {
         let markets = db.collection("markets");
         const marketParams = {
             "address": '0x',
-            "creationDatetime": 1e6,
+            "creationDate": 1e6,
             "wageDeadline": 1e6 + 10,
             "resolutionDate": 1e6 + 20,
             "status": "inprogress",
@@ -61,12 +61,12 @@ describe('testing /markets  model', async function() {
                 db,
                 params
             )
-        )[0];
+        );
 
         // validating fields
         const fieldToReturn = [
             "address",
-            "creationDatetime",
+            "creationDate",
             "wageDeadline",
             "resolutionDate",
             "status",

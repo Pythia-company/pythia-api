@@ -12,7 +12,7 @@ export const getMarket = async(db, params) => {
                 _id: 0,
                 address: 1,
                 question: 1,
-                creationDatetime: 1,
+                creationDate: 1,
                 wageDeadline: 1,
                 resolutionDate: 1,
                 topic: 1,

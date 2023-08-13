@@ -44,7 +44,7 @@ export const getUserMarkets = async(db, params) => {
         },
         {
             $sort: {
-                "markets.predictionDatetime": sortOrder
+                "markets.predictionDate": sortOrder
             }
         },
         {
@@ -52,7 +52,7 @@ export const getUserMarkets = async(db, params) => {
                 _id: 0,
                 address: "$markets.address",
                 question: "$markets.question",
-                creationDatetime: "$markets.creationDatetime",
+                creationDate: "$markets.creationDate",
                 wageDeadline: "$markets.wageDeadline",
                 resolutionDate: "$markets.resolutionDate",
                 topic: "$markets.topic",

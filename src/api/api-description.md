@@ -106,7 +106,7 @@ servers:
                       type: string
                     question:
                       type: string
-                    creationDatetime:
+                    creationDate:
                       type: string
                     wageDeadline:
                       type: string
@@ -146,7 +146,7 @@ https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01
     {
         "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
         "question": "will btc/usd exceed 40000$?"
-        "creationDatetime": "2023-04-01T01:00:00.000Z"
+        "creationDate": "2023-04-01T01:00:00.000Z"
         "wageDeadline": "2023-08-01T01:00:00.000Z"
         "resolutionDate": "2023-07-10T01:00:00.000Z"
         "topic": "trading"
@@ -200,7 +200,7 @@ https://api.pythia.company/markets/?topics[]=nft&wageDeadlineAfter=2023-08-01T01
                     type: string
                   question:
                     type: string
-                  creationDatetime:
+                  creationDate:
                     type: string
                   wageDeadline:
                     type: string
@@ -252,7 +252,7 @@ https://api.pythia.company/markets/0x1?predictions=10&user=0x2
 {
     "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
     "question": "will btc/usd exceed 40000$?"
-    "creationDatetime": "2023-04-01T01:00:00.000Z"
+    "creationDate": "2023-04-01T01:00:00.000Z"
     "wageDeadline": "2023-08-01T01:00:00.000Z"
     "resolutionDate": "2023-07-10T01:00:00.000Z"
     "topic": "trading"
@@ -325,7 +325,7 @@ https://api.pythia.company/markets/0x1?predictions=10&user=0x2
                   properties:
                     address: 
                       type: string
-                    registrationDatetime:
+                    registrationDate:
                       type: string
                     accuracy:
                       type: number
@@ -341,7 +341,7 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
 [
     {
         "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-        "registrationDatetime": "2023-04-01T01:00:00.000Z"
+        "registrationDate": "2023-04-01T01:00:00.000Z"
         "accuracy": 0.8,
         "reputation": 10.1
     }
@@ -368,7 +368,7 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
           schema:
             type: string
             description: topic
-        - name: predictionDatetime
+        - name: predictionDate
           in: query
           required: false
           schema:
@@ -394,7 +394,7 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
                 properties:
                   address:
                     type: string
-                  registrationDatetime: 
+                  registrationDate: 
                     type: string
                   accuracy:
                     type: number
@@ -409,7 +409,7 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
                           type: string
                         status:
                           type: string
-                        predictionDatetime:
+                        predictionDate:
                           type: string
                         correct:
                           type: boolean
@@ -422,27 +422,27 @@ https://api.pythia.company/users/?topics[]=nft&sort[accuracy]=asc&limit=20
 ```
 ### Request
 ```
-https://api.pythia.company/users/0x1?predictionDatetime=2023-04-01T01:00:00.000Z/statuses[]=resolved
+https://api.pythia.company/users/0x1?predictionDate=2023-04-01T01:00:00.000Z/statuses[]=resolved
 ```
 ### Response
 ```javascript
 {
     "address": "0xFfeEcd85edF58666AEb95Cc2EFA855DA62E6ea56"
-    "registrationDatetime": "2023-04-01T01:00:00.000Z"
+    "registrationDate": "2023-04-01T01:00:00.000Z"
     "accuracy": 0.8,
     "reputation": 10.1
     "markets": [
         {
             "address": "0x2",
             "status": "resolved",
-            "predictionDatetime": "2023-04-01T01:00:00.000Z",
+            "predictionDate": "2023-04-01T01:00:00.000Z",
             "correct": true,
             "reputation": 10.1
         },
         {
             "address": "0x3",
             "status": "resolved",
-            "predictionDatetime": "2023-05-01T01:00:00.000Z",
+            "predictionDate": "2023-05-01T01:00:00.000Z",
             "correct": false,
             "reputation": 0
         }

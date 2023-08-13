@@ -35,8 +35,8 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
                 {
                     "address": "0x1",
                     "question": "question",
-                    "creationDatetime": 1e6,
-                    "predictionDatetime": 1e6,
+                    "creationDate": 1e6,
+                    "predictionDate": 1e6,
                     "wageDeadline": 1e6,
                     "resolutionDate": 1e6,
                     "topic": "topic",
@@ -51,9 +51,9 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
                 {
                     "address": "0x2",
                     "question": "question",
-                    "creationDatetime": 1e6,
+                    "creationDate": 1e6,
                     "wageDeadline": 1e6,
-                    "predictionDatetime": 1e6,
+                    "predictionDate": 1e6,
                     "status": "unresolved",
                     "resolutionDate": 1e6,
                     "topic": "topic",
@@ -80,9 +80,9 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
             )
         );
         const fieldsToReturn = [
-            'predictionDatetime',
+            'predictionDate',
             'encodedPrediction',
-            'reputationCollectionDateTime',
+            'reputationCollectionDate',
             'decodedPrediction',
             'reputation',
             'correct'

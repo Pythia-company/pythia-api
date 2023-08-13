@@ -31,7 +31,9 @@ export const getMarketController = async(req, res) => {
             db,
             params
         );
-        logger.info(`output: ${output}`);
+        if(output == null){
+            return res.status(204).send({})
+        }
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)

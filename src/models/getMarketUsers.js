@@ -27,19 +27,19 @@ export const getMarketUsers = async(db, params) => {
         },
         {
             $sort: {
-                "markets.predictionDatetime": sortOrder
+                "markets.predictionDate": sortOrder
             }
         },
         {
            $project: {
                 _id: 0,
                 address: 1,
-                predictionDatetime: "$markets.predictionDatetime",
+                predictionDate: "$markets.predictionDate",
                 encodedPrediction: "$markets.encodedPrediction",
-                reputationCollectionDateTime: {
+                reputationCollectionDate: {
                     $cond: {
-                        if: { $ifNull: ['$markets.reputationCollectionDateTime', false] },
-                        then: "$markets.reputationCollectionDateTime",
+                        if: { $ifNull: ['$markets.reputationCollectionDate', false] },
+                        then: "$markets.reputationCollectionDate",
                         else: null
                     },
                 },

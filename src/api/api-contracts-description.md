@@ -43,7 +43,7 @@
                         "type": "hex",
                         "default": null
                     },
-                    "predictionDateTime": {
+                    "predictionDate": {
                         "type": "integer",
                         "default": null,
                     },
@@ -55,7 +55,7 @@
                         "type": "int",
                         "default": null,
                     },
-                    "reputationCollectionDateTime": {
+                    "reputationCollectionDate": {
                         "type": "integer",
                         "default": null,
                     },
@@ -107,7 +107,7 @@
                 "type": "hex",
                 "default": null
             },
-            "predictionDateTime": {
+            "predictionDate": {
                 "type": "integer",
                 "default": null,
             },
@@ -119,7 +119,7 @@
                 "type": "int",
                 "default": null,
             },
-            "reputationCollectionDateTime": {
+            "reputationCollectionDate": {
                 "type": "integer",
                 "default": null,
             },

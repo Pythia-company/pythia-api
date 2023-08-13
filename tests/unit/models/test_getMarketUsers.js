@@ -32,7 +32,7 @@ describe('testing /markets model', async function() {
             "markets": [
                 {
                     "address": "0x1",
-                    "creationDatetime": 1e6,
+                    "creationDate": 1e6,
                     "wageDeadline": 1e6 + 10,
                     "resolutionDate": 1e6 + 20,
                     "status": "inprogress",
@@ -45,11 +45,11 @@ describe('testing /markets model', async function() {
                     ],
                     "question": "question",
                     "encodedPrediction": "0x4",
-                    "predictionDatetime": 1e6
+                    "predictionDate": 1e6
                 },
                 {
                     "address": "0x2",
-                    "creationDatetime": 1e6,
+                    "creationDate": 1e6,
                     "wageDeadline": 1e6 + 10,
                     "resolutionDate": 1e6 + 20,
                     "status": "inprogress",
@@ -62,7 +62,7 @@ describe('testing /markets model', async function() {
                     ],
                     "question": "question",
                     "encodedPrediction": "0x4",
-                    "predictionDatetime": 1e6
+                    "predictionDate": 1e6
                 }
             ]
 
@@ -80,9 +80,9 @@ describe('testing /markets model', async function() {
         )[0];
         const fieldsToReturn = [
             'address',
-            'predictionDatetime',
+            'predictionDate',
             'encodedPrediction',
-            'reputationCollectionDateTime',
+            'reputationCollectionDate',
             'decodedPrediction',
             'reputation'
         ]

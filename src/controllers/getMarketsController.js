@@ -43,6 +43,9 @@ export const getMarketsController = async(req, res) => {
             db,
             params
         );
+        if(output == null){
+            return res.status(204).send({})
+        }
         return res.send(output);
     }else{
         res.status(400).send(error.details[0].message)
