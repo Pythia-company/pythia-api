@@ -38,6 +38,6 @@ export const getUserStatsController = async(req, res) => {
         }
         return res.send(output);
     }else{
-        res.status(400).send(error.details[0].message)
+        res.status(400).send("wrong request format")
     };
 }

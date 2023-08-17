@@ -1,5 +1,5 @@
 export const getUsers = async(db, params) => {
-    const usersCollection = await db.collection("users");
+    const usersCollection = await db.collection("markets");
     
     const offset = params['offset'] || 0
     const limit = params['limit'] || 10
@@ -7,71 +7,67 @@ export const getUsers = async(db, params) => {
     let dateCondition = {}
     if(params['periodDays'] != null){
         dateCondition = {
-            $gte: [
-                "$$markets.resolutionDate",
-                Math.floor(Date.now() / 1000) - params['periodDays'] * 24 * 3600
-            ]
+            "resolutionDate":{
+                $gte: Math.floor(Date.now() / 1000) - params['periodDays'] * 24 * 3600
+            }
         }
     }
     const reputationCondition = {
-        $gt: ["$$markets.reputation", 0]
+        $gt: ["$users.reputation", 0]
     }
 
-    const resolvedCondition = {
-        $eq: ["$$markets.resolved", true]
-    }
+    const resolvedCondition = {"status": "resolved"}
+
 
     const aggregateQuery =  [
         {
+            $unwind: "$users"
+        },
+        {
+            $match: {
+                $and: [resolvedCondition, dateCondition]
+            }
+        },
+        {
             $addFields: {
                 reputation: {
-                    $filter: {
-                        input: "$markets",
-                        as: "markets",
-                        cond: {
-                            $and: [
-                                dateCondition,
-                                reputationCondition,
-                                resolvedCondition
-                            ]
-                        }
-                    }
-                },
-                totalMarkets: {
-                    $size: {
-                        $filter: {
-                            input: "$markets",
-                            as: "markets",
-                            cond: {
-                                $and: [
-                                    dateCondition,
-                                    resolvedCondition
-                                ]
-                            }
-                        }
+                    $cond: { 
+                        if: reputationCondition,
+                        then: "$users.reputation",
+                        else: 0
                     }
                 },
                 correctMarkets: {
-                    $size: {
-                        $filter: {
-                            input: "$markets",
-                            as: "markets",
-                            cond: {
-                                $and: [
-                                    dateCondition,
-                                    reputationCondition,
-                                    resolvedCondition
-                                ]
-                            }
-                        }
+                    $cond: { 
+                        if: {
+                            $eq: [
+                                "$users.decodedPrediction",
+                                "$answer"
+                            ]
+                        },
+                        then: 1,
+                        else: 0
                     }
                 }
             }
         },
         {
+            $group: {
+                _id: "$users.address",
+                correctMarkets: {
+                    $sum: "$correctMarkets"
+                },
+                reputation: {
+                    $sum: "$reputation"
+                },
+                totalMarkets: {
+                    $sum: 1
+                }
+            }
+        },
+        {
             $project: {
-                _id: 0,
-                address: 1,
+                address: "$_id",
                 accuracy: {
                     $cond: {
                         if: {$eq: ["$totalMarkets", 0]},
@@ -90,9 +86,7 @@ export const getUsers = async(db, params) => {
                         }
                     }
                 },
-                reputation: {
-                    $sum: "$markets.reputation"
-                },
+                reputation: 1
             }
         },
         {

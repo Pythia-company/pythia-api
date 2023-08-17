@@ -40,6 +40,6 @@ export const getMarketController = async(req, res) => {
         }
         res.send(output);
     }else{
-        res.status(400).send("wrong json request")
+        res.status(400).send("wrong request format")
     };
 }
