@@ -25,10 +25,12 @@ export const validateFields = async (params) => {
 
 export const getUsersController = async(req, res) => {
     const params = req.query;
-    if(validateFields(params)){
+
+    const paramsValid = await validateFields(params);
+    if(paramsValid){
         const output = await getUsers(db, params);
         if(output == null){
-            return res.status(204).send({});
+            return res.send([]);
         }
         return res.send(output);
     }else{

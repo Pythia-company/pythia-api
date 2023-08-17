@@ -1,5 +1,5 @@
 export const getUserMarket = async(db, params) => {
-    const usersCollection = await db.collection("users");
+    const marketCollection = await db.collection("markets");
 
     const offset = params['offset'] || 0
     const limit = params['limit'] || 10
@@ -15,59 +15,44 @@ export const getUserMarket = async(db, params) => {
     const matchParams = [];
     matchParams.push(
         {
-            "address": params.userAddress
+            "address": params.marketAddress
+        },
+        {
+            "users.address": params.userAddress
         }
     );
-    if(params['resolved'] == true){
-        matchParams.push(
-            {
-                "markets.status": "resolved"
-            }
-        )
-    }
-    if(params['receivedReward'] != null){
-        matchParams.push(
-            {
-                "reputation": {$ne : null}
-            }
-        )
-    }
 
     const results = (
-        await usersCollection.aggregate([
-            { $unwind: "$markets" },
+        await marketCollection.aggregate([
+            { $unwind: "$users" },
             {
                 $match: {
-                    $and: [
-                        {
-                            "address": params.userAddress
-                        }
-                    ]
+                    $and: matchParams
                 }
             },
             {
             $project: {
                     _id: 0,
-                    predictionDate: "$markets.predictionDate",
-                    encodedPrediction: "$markets.encodedPrediction",
+                    predictionDate: "$users.predictionDate",
+                    encodedPrediction: "$users.encodedPrediction",
                     reputationCollectionDate: {
                         $cond: {
-                            if: { $ifNull: ['$markets.reputationCollectionDate', false] },
-                            then: "$markets.reputationCollectionDate",
+                            if: { $ifNull: ['$users.reputationCollectionDate', false] },
+                            then: "$users.reputationCollectionDate",
                             else: null
                         },
                     },
                     decodedPrediction: {
                         $cond: {
-                            if: { $ifNull: ['$markets.decodedPrediction', false] },
-                            then: "$markets.decodedPrediction",
+                            if: { $ifNull: ['$users.decodedPrediction', false] },
+                            then: "$users.decodedPrediction",
                             else: null
                         },
                     },
                     reputation: {
                         $cond: {
-                            if: { $ifNull: ['$markets.reputation', false] },
-                            then: "$markets.reputation",
+                            if: { $ifNull: ['$users.reputation', false] },
+                            then: "$users.reputation",
                             else: null
                         },
                     },
@@ -75,8 +60,8 @@ export const getUserMarket = async(db, params) => {
                         $cond: {
                             if: {
                                 $and: [
-                                    {$eq:["$markets.decodedPrediction", "$markets.answer"]},
-                                    { $ifNull: ['$markets.decodedPrediction', false]}
+                                    {$eq:["$users.decodedPrediction", "$answer"]},
+                                    { $ifNull: ['$users.decodedPrediction', false]}
                                 ]
                             },
                             then: true,

@@ -28,11 +28,11 @@ export const validateFields = async (params) => {
 export const getUserMarketsController = async(req, res) => {
     const params = req.query;
     params["userAddress"] = req.params.userAddress;
-
-    if(validateFields(params)){
+    const paramsValid = await validateFields(params);
+    if(paramsValid){
         const output = await getUserMarkets(db, params);
         if(output == null){
-            return res.status(204).send({})
+            return res.send([]);
         }
         return res.send(output);
     }else{

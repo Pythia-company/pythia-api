@@ -35,7 +35,7 @@ userRouter.get('/stats/:userAddress', async (req, res) => {
 });
 
 
-userRouter.get('/:userAddress/market/:marketAddress', async (req, res) => {
+userRouter.get('/:userAddress/markets/:marketAddress', async (req, res) => {
   await getUserMarketController(req, res);
 });
 

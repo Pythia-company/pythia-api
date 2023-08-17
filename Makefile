@@ -1,5 +1,7 @@
 test:
 	npm test
+run:
+	node src/server.js
 debug:
 	docker build -t pythia.api.v1 . && \
 	docker run -p 8888:8888 \

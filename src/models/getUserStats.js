@@ -1,4 +1,5 @@
 export const getUserStats = async(db, params) => {
+    const marketsCollection = await db.collection("markets");
     const usersCollection = await db.collection("users");
 
     let minPeriod = null
@@ -7,35 +8,37 @@ export const getUserStats = async(db, params) => {
         minPeriod = Math.floor(Date.now() / 1000) - 180 * 24 * 3600
         periodDaysCondition = {
             $gte: [
-                "$markets.resolutionDate",
+                "$resolutionDate",
                 Math.floor(Date.now() / 1000) - 180 * 24 * 3600
             ]
         }
     }else{
         periodDaysCondition = {
             $gte: [
-                "$markets.resolutionDate",
+                "$resolutionDate",
                 Math.floor(Date.now() / 1000) - params['periodDays'] * 24 * 3600
             ]
         }
     }
-    const reputationCondition = {$gt: ["$markets.reputation", 0]}
+    const reputationCondition = {$gt: ["$users.reputation", 0]}
 
     const resolvedCondition = {
-        $eq: ["$markets.resolved", true]
+        $eq: ["$status", "resolved"]
     }
 
     const topicCondition  = {
-        $eq: ["$markets.topic", params.topic]
-    }
-    const addressCondition = {
-        $eq: ["$address", params.userAddress]
+        $eq: ["$topic", params.topic]
     }
     const numUsers = await usersCollection.count();
 
     const aggregatedStatQuery =  [
         {
-            $unwind: "$markets"
+            $unwind: "$users"
+        },
+        {
+            $match: {
+                "users.address": params.userAddress
+            }
         },
         {
             $addFields: {
@@ -48,7 +51,7 @@ export const getUserStats = async(db, params) => {
                                 topicCondition
                             ]
                         },
-                        then: "$markets.reputation",
+                        then: "$users.reputation",
                         else: 0
                     }
                 },
@@ -94,7 +97,7 @@ export const getUserStats = async(db, params) => {
         },
         {
             $group: {
-                _id: "$address",
+                _id: "$users.address",
                 reputation: {
                     $sum: "$reputation"
                 },
@@ -152,27 +155,33 @@ export const getUserStats = async(db, params) => {
         }
     ];
     const aggregatedStats = (
-        await usersCollection.aggregate(
+        await marketsCollection.aggregate(
             aggregatedStatQuery
         ).toArray()
     )[0];
+    if(aggregatedStats == null){
+        return null
+    }
 
     const chartsQuery = [
+        {
+            $unwind: "$users"
+        },
         {
             $match: {
                 $and: [
                     {
-                        "address": {
+                        "users.address": {
                             $eq: params.userAddress
                         }
                     },
                     {
-                        "markets.topic": {
+                        "topic": {
                             $eq: "defi"
                         }
                     },
                     {
-                        "markets.resolutionDate": {
+                        "resolutionDate": {
                             $gte: minPeriod
                         }
                     }
@@ -180,14 +189,11 @@ export const getUserStats = async(db, params) => {
             }
         },
         {
-            $unwind: "$markets"
-        },
-        {
             $addFields: {
                 day: {
                     $toInt: {
                         $divide: [
-                            "$markets.resolutionDate",
+                            "$resolutionDate",
                             24 * 3600
                         ]
                     }
@@ -197,13 +203,13 @@ export const getUserStats = async(db, params) => {
                         if: {
                             $and: [
                                 {
-                                    $eq: ["$markets.reputation", null]
+                                    $eq: ["$users.reputation", null]
                                 },
                                 resolvedCondition
                             ] 
                         },
                         then: 0,
-                        else: "$markets.reputation"
+                        else: "$users.reputation"
                     }
                 }
             }
@@ -231,7 +237,7 @@ export const getUserStats = async(db, params) => {
     ]
 
     const chartStats = (
-        await usersCollection.aggregate(
+        await marketsCollection.aggregate(
             chartsQuery
         ).toArray()
     );

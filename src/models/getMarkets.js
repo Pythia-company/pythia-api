@@ -3,6 +3,9 @@ import {
 } from "../utils/utils.js";
 
 export const getMarkets = async(db, params) => {
+    if(params == null){
+        params = {}
+    }
     const marketsCollection = await db.collection("markets");
     const matchParams = []
     Object.entries(params).forEach(([parameter, value]) => {
@@ -60,7 +63,6 @@ export const getMarkets = async(db, params) => {
     if(params['sort'] == null){
         params['sort'] = {}
     }
-    console.log(`params of sort: ${params['sort'] == null}`);
     if(params['sort']['wageDeadline'] == null){
         params['sort']['wageDeadline'] = 'asc'
     }
@@ -71,54 +73,62 @@ export const getMarkets = async(db, params) => {
         params['sort']['numOfPredictors'] = 'asc'
     }
 
-
-    return await marketsCollection.aggregate(
-            [
-                {
-                    $match: {
-                        $and: matchParams
-                    }
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        address: 1,
-                        question: 1,
-                        creationDate: 1,
-                        wageDeadline: 1,
-                        resolutionDate: 1,
-                        topic: 1,
-                        reputationTokenAddress:1,
-                        options: 1,
-                        status: 1,
-                        answer: {
-                            $cond: {
-                                if: { $ifNull: ['$answer', false] },
-                                then: "$answer",
-                                else: null
-                            },
-                        },
-                        numOfPredictors: {
-                            $cond: {
-                                if: { $ifNull: ['$users', false] },
-                                then: {
-                                    $size: "$users"
-                                },
-                                else: 0
-                            },
-                        }
-                    }
-                },
-                {
-                    $sort: transformSortParams(params['sort'])
-                },
-                {
-                    $skip: params['offset'] || 0
-                },
-                {
-                    $limit: params['limit'] || 10
+    const aggregateQuery = []
+    if(matchParams.length > 0){
+        aggregateQuery.push(
+            {
+                $match: {
+                    $and: matchParams
                 }
-            ]
+            }
         )
-        .toArray()
+    }
+    aggregateQuery.push(
+        {
+            $project: {
+                _id: 0,
+                address: 1,
+                question: 1,
+                creationDate: 1,
+                wageDeadline: 1,
+                resolutionDate: 1,
+                topic: 1,
+                reputationTokenAddress:1,
+                options: 1,
+                status: 1,
+                answer: {
+                    $cond: {
+                        if: { $ifNull: ['$answer', false] },
+                        then: "$answer",
+                        else: null
+                    },
+                },
+                numOfPredictors: {
+                    $cond: {
+                        if: { $ifNull: ['$users', false] },
+                        then: {
+                            $size: "$users"
+                        },
+                        else: 0
+                    },
+                }
+            }
+        },
+        {
+            $sort: transformSortParams(params['sort'])
+        },
+        {
+            $skip: params['offset'] || 0
+        },
+        {
+            $limit: params['limit'] || 10
+        }
+    )
+
+
+
+    const result = await marketsCollection.aggregate(
+        aggregateQuery
+    ).toArray()
+    return result;
 }

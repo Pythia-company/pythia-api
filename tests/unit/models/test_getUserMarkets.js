@@ -67,7 +67,6 @@ describe('testing /users/{userAddress}/markets model', async function() {
         await users.insertOne(userParams);
         const params = {
             "userAddress": "0x",
-            "resolved": true
         }
         const results = (
             await getUserMarkets(
@@ -75,6 +74,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
                 params
             )
         )[0];
+        console.log(`results:${results}`)
         const fieldsToReturn = [
             'address',
             'question',

@@ -37,17 +37,23 @@ export const validateFields = async (params) => {
 }
 
 export const getMarketsController = async(req, res) => {
+    console.log("markets controller received request with params:");
+    console.log(req.query);
     const params = req.query;
-    if(validateFields(params)){
+
+    const paramsValid = await validateFields(params);
+    if(paramsValid){
         const output = await getMarkets(
             db,
             params
         );
         if(output == null){
-            return res.status(204).send({})
+            return res.send([])
         }
         return res.send(output);
     }else{
-        res.status(400).send(error.details[0].message)
+        res.status(400).send(
+            "invalid parameters for /markets enpoint"
+        )
     };
 }

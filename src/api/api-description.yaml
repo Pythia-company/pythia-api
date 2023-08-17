@@ -364,6 +364,9 @@ paths:
                   reputation:
                     type: integer
                     description: date when user registered
+                  totalPredictions:
+                    type: integer
+                    description: total predictions
                   chart:
                     type: array
                     items:

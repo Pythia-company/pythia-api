@@ -23,19 +23,23 @@ export const validateFields = async (params) => {
 }
 
 export const getMarketController = async(req, res) => {
+    console.log("market controller received request with params:");
+    console.log(req.params);
     const params = {
         'marketAddress': req.params.marketAddress
     };
-    if(validateFields(params)){
+    const paramsValid = await validateFields(params);
+    if(paramsValid){
         const output = await getMarket(
             db,
             params
         );
+        console.log(`output:${output}`)
         if(output == null){
-            return res.status(204).send({})
+            return res.send({})
         }
-        return res.send(output);
+        res.send(output);
     }else{
-        res.status(400).send(error.details[0].message)
+        res.status(400).send("wrong json request")
     };
 }

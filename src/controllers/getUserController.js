@@ -21,13 +21,17 @@ export const validateFields = async (params) => {
 }
 
 export const getUserController = async(req, res) => {
+    console.log("user controller received request with params:");
+    console.log(req.params);
     const params = {
         "userAddress": req.params.userAddress
     }
-    if(validateFields(params)){
+
+    const paramsValid = await validateFields(params);
+    if(paramsValid){
         const output = await getUser(db, params);
         if(output == null){
-            return res.status(204).send({});
+            return res.send({});
         }
         return res.send(output);
     }else{
