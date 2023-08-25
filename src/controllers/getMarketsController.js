@@ -8,7 +8,7 @@ export const validateFields = async (params) => {
     const schema =  Joi.object({
         topics: Joi.array().items(
             Joi.string().regex(
-                new RegExp('^0x([a-fA-F0-9]+)?$')
+                new RegExp('^[a-z]+$')
             )
         ),
         createdAfter: Joi.number().integer().min(0),

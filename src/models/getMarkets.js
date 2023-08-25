@@ -8,6 +8,8 @@ export const getMarkets = async(db, params) => {
     }
     const marketsCollection = await db.collection("markets");
     const matchParams = []
+
+
     Object.entries(params).forEach(([parameter, value]) => {
         if(parameter === "topic"){
             matchParams.push(
@@ -21,7 +23,7 @@ export const getMarkets = async(db, params) => {
             matchParams.push(
                 {
                     "creationDate" : {
-                        $gte: value
+                        $gte: parseInt(value)
                     }
                 }
             )
@@ -29,7 +31,7 @@ export const getMarkets = async(db, params) => {
             matchParams.push(
                 {
                     "wageDeadline" : {
-                        $gte: value
+                        $gte: parseInt(value)
                     }
                 }
             )
@@ -37,7 +39,7 @@ export const getMarkets = async(db, params) => {
             matchParams.push(
                 {
                     "resolutionDate" : {
-                        $gte: value
+                        $gte: parseInt(value)
                     }
                 }
             )
@@ -118,10 +120,10 @@ export const getMarkets = async(db, params) => {
             $sort: transformSortParams(params['sort'])
         },
         {
-            $skip: params['offset'] || 0
+            $skip: parseInt(params['offset'] || 0)
         },
         {
-            $limit: params['limit'] || 10
+            $limit: parseInt(params['limit'] || 10)
         }
     )
 

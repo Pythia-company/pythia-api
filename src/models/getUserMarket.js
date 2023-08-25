@@ -1,8 +1,6 @@
 export const getUserMarket = async(db, params) => {
     const marketCollection = await db.collection("markets");
 
-    const offset = params['offset'] || 0
-    const limit = params['limit'] || 10
     const sortOrder = (
         (
             (params['order'] == null) ||

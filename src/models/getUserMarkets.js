@@ -1,8 +1,6 @@
 export const getUserMarkets = async(db, params) => {
     const usersCollection = await db.collection("markets");
 
-    const offset = params['offset'] || 0
-    const limit = params['limit'] || 10
     const sortOrder = (
         (
             (params['order'] == null) ||
@@ -91,10 +89,10 @@ export const getUserMarkets = async(db, params) => {
             }
         },
         {
-            $skip: offset
+            $skip: parseInt(params['offset'] || 0)
         },
         {
-            $limit: limit
+            $limit: parseInt(params['limit'] || 10)
         }
      ])
      .toArray();

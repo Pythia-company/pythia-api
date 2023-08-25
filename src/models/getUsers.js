@@ -1,14 +1,12 @@
 export const getUsers = async(db, params) => {
     const usersCollection = await db.collection("markets");
     
-    const offset = params['offset'] || 0
-    const limit = params['limit'] || 10
 
     let dateCondition = {}
     if(params['periodDays'] != null){
         dateCondition = {
             "resolutionDate":{
-                $gte: Math.floor(Date.now() / 1000) - params['periodDays'] * 24 * 3600
+                $gte: Math.floor(Date.now() / 1000) - parseInt(params['periodDays']) * 24 * 3600
             }
         }
     }
@@ -97,10 +95,10 @@ export const getUsers = async(db, params) => {
             }
         },
         {
-            $skip: offset
+            $skip: parseInt(params['offset'] || 0)
         },
         {
-            $limit: limit
+            $limit: parseInt(params['limit'] || 10)
         }
     ];
     return await usersCollection.aggregate(

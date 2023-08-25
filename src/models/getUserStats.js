@@ -16,7 +16,7 @@ export const getUserStats = async(db, params) => {
         periodDaysCondition = {
             $gte: [
                 "$resolutionDate",
-                Math.floor(Date.now() / 1000) - params['periodDays'] * 24 * 3600
+                Math.floor(Date.now() / 1000) - parseInt(params['periodDays']) * 24 * 3600
             ]
         }
     }

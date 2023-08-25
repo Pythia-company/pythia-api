@@ -12,6 +12,7 @@ debug:
 	-v $(PWD)/src/models:/app/models \
 	-v $(PWD)/src/routes:/app/routes \
 	-v $(PWD)/src/server.js:/app/server.js \
+	--restart always \
 	pythia.api.v1:latest
 prod:
 	docker build -t pythia.api.v1 . && \
@@ -23,4 +24,5 @@ prod:
 	-v $(PWD)/src/models:/app/models \
 	-v $(PWD)/src/routes:/app/routes \
 	-v $(PWD)/src/server.js:/app/server.js \
+	--restart always \
 	pythia.api.v1:latest
