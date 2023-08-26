@@ -24,6 +24,8 @@ export const validateFields = async (params) => {
 }
 
 export const getUsersController = async(req, res) => {
+    console.log("markets controller received request with params:");
+    console.log(req.query);
     const params = req.query;
 
     const paramsValid = await validateFields(params);

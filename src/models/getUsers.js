@@ -10,6 +10,8 @@ export const getUsers = async(db, params) => {
             }
         }
     }
+    const topicCondition = {"topic": params.topic}
+    
     const reputationCondition = {
         $gt: ["$users.reputation", 0]
     }
@@ -23,7 +25,7 @@ export const getUsers = async(db, params) => {
         },
         {
             $match: {
-                $and: [resolvedCondition, dateCondition]
+                $and: [resolvedCondition, dateCondition, topicCondition]
             }
         },
         {
@@ -78,13 +80,16 @@ export const getUsers = async(db, params) => {
                                         100
                                     ]
                                 },
-                                2
-                                     
+                                2     
                             ]
                         }
                     }
                 },
-                reputation: 1
+                reputation: {
+                    $round: [
+                        "$reputation", 3
+                    ]
+                }
             }
         },
         {

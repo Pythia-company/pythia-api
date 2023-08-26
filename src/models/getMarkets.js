@@ -52,12 +52,7 @@ export const getMarkets = async(db, params) => {
         }else if(parameter === "questionPattern"){
             matchParams.push(
                 {
-                    "question": {
-                        $text: {
-                            $search: value,
-                            $caseSensitive: false
-                        } 
-                    }
+                    "question": {$regex: value, $options: "i" }
                 }
             )
         }

@@ -16,7 +16,7 @@ export const validateFields = async (params) => {
         resolvesAfter: Joi.number().integer().min(0),
         status: Joi.string().valid('inprogress', 'unresolved', 'resolved'),
         questionPattern: Joi.string().regex(
-            new RegExp('^[a-z //]+$')
+            new RegExp('^[a-zA-Z //]+$')
         ),
         sort: Joi.object().keys({
             wageDeadline : Joi.string().valid("asc", "desc"),

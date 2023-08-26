@@ -25,6 +25,10 @@ marketRouter.get('/:marketAddress/users', async (req, res) => {
   await getMarketUsersController(req, res);
 });
 
+marketRouter.get('/predictions', async (req, res) => {
+  await getMarketsPredictionsController(req, res);
+});
+
 
 
 

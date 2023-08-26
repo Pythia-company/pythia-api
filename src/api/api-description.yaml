@@ -502,3 +502,39 @@ paths:
                   correct:
                     type: boolean
                     default: null
+  /predictions:
+    get:
+      summary: get latest predictions
+      description: get latest predictions
+      parameters:
+        - name: topic
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [nft, defi, trading]
+            description: topic of the markets
+      responses:
+        '200':
+          description: user's prediction for the market
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user:
+                      type: string
+                      description: user address
+                    market:
+                      type: string
+                      description: market address
+                    topic:
+                      type: string
+                      description: topic of the market
+                    encodedPrediction:
+                      type: string
+                      description: encoded version of the user's prediction
