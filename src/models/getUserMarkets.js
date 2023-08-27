@@ -16,6 +16,15 @@ export const getUserMarkets = async(db, params) => {
             "users.address": params.userAddress
         }
     );
+    if(params['topics'] != null){
+        matchParams.push(
+            {
+                "topic" : {
+                    $in: params['topics']
+                }
+            }
+        )
+    }
     if(params['resolved'] == true){
         matchParams.push(
             {

@@ -386,6 +386,14 @@ paths:
           schema:
             type: string
             description: user address
+        - name: topics
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+            description: list of topics
         - name: resolved
           in: query
           required: false

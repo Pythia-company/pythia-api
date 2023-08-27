@@ -9,6 +9,11 @@ export const validateFields = async (params) => {
         userAddress: Joi.string().regex(
             new RegExp('^0x([a-fA-F0-9]+)?$')
         ).required(),
+        topics: Joi.array().items(
+            Joi.string().regex(
+                new RegExp('^[a-z]+$')
+            )
+        ),
         resolved: Joi.boolean(),
         receivedReward: Joi.boolean(),
         order: Joi.string().valid('asc','desc'),
