@@ -11,10 +11,14 @@ import {
     predictionsRouter
 } from "./routes/predictions.js";
 
+import cors from 'cors';
+
 const PORT = process.env.PORT || 8888
 
 
 let app = express();
+
+app.use(cors());
 
 app.use("/users", userRouter);
 

@@ -25,13 +25,14 @@ export const validateFields = async (params) => {
 }
 
 export const getUserStatsController = async(req, res) => {
-    console.log("received request with params")
+    console.log("user stats controller received request with params")
     console.log(req.params)
     console.log(req.query)
     const params = req.query;
     params["userAddress"] = req.params.userAddress;
+    const paramsValid = await validateFields(params);
 
-    if(validateFields(params)){
+    if(paramsValid){
         const output = await getUserStats(db, params);
         if(output == null){
             return res.send({});

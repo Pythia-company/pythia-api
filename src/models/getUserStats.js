@@ -136,10 +136,18 @@ export const getUserStats = async(db, params) => {
                                 $subtract: [
                                     1,
                                     {
-                                        $divide: [
-                                            "$rank",
-                                            numUsers
-                                        ]
+                                        $cond: {
+                                            if: {
+                                                $gt: [numUsers, 0]
+                                            },
+                                            then: {
+                                                $divide: [
+                                                    "$rank",
+                                                    numUsers
+                                                ]
+                                            },
+                                            else:0
+                                        }
                                     }
                                 ]
                             }
@@ -147,7 +155,15 @@ export const getUserStats = async(db, params) => {
                     }
                 },
                 accuracy: {
-                    $divide: ["$correct", "$resolved"]
+                    $cond: { 
+                        if: {
+                            $gt: ["$resolved", 0]
+                        },
+                        then: {
+                            $divide: ["$correct", "$resolved"]
+                        },
+                        else: 0
+                    }
                 },
                 reputation: 1,
                 totalPredictions: 1
