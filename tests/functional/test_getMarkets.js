@@ -21,6 +21,6 @@ describe('testing /markets enpoint', async function() {
             "numOfPredictors"
         ]
 
-        expect(Object.keys(responseData[0])).to.have.members(responseFields);
+        expect(Object.keys(responseData["data"][0])).to.have.members(responseFields);
     })
 })

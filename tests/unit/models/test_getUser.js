@@ -4,7 +4,7 @@ import {
     getUser
 } from "../../../src/models/getUser.js";
 
-describe('testing /markets model', async function() {
+describe('testing /users/{userAddress} model', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");
@@ -46,15 +46,15 @@ describe('testing /markets model', async function() {
                 db,
                 params
             )
-        )[0];
+        );
         const fieldsToReturn = [
             "address",
-            "description",
             "status",
             "registrationDate",
+            "description",
             "nextSubcriptionPayDate",
             "nextSubcriptionAmountDue"
         ]
-        expect(fieldsToReturn).to.eql(Object.keys(results));
+        expect(fieldsToReturn).to.eql(Object.keys(results["data"]));
     })
 })

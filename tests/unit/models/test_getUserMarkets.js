@@ -7,7 +7,7 @@ import {
 describe('testing /users/{userAddress}/markets model', async function() {
 
     beforeEach(async function () {
-        const users = await db.collection("users");
+        const users = await db.collection("markets");
 
         await users.deleteMany(
             {}
@@ -16,7 +16,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
     });
 
     afterEach(async function () {
-        const users = await db.collection("users");
+        const users = await db.collection("markets");
         await users.deleteMany(
             {}
         );
@@ -25,46 +25,52 @@ describe('testing /users/{userAddress}/markets model', async function() {
   
     // test a functionality
     it('testing return fields', async function() {
-        let users = db.collection("users");
-        const userParams = {
-            "address": '0x',
-            "description": "hello",
-            "status": "subscribed",
-            "registrationDate": 1e6,
-            "markets": [
-                {
-                    "address": "0x1",
-                    "question": "question",
-                    "creationDate": 1e6,
-                    "wageDeadline": 1e6,
-                    "resolutionDate": 1e6,
-                    "topic": "topic",
-                    "reputationTokenAddress": "0x3",
-                    "status": "resolved",
-                    "answer": 9,
-                    "decodedPrediction": 8,
-                    "reputaion": 9.1,
-                    "options": ["1", "2"]
-                },
-                {
-                    "address": "0x2",
-                    "question": "question",
-                    "creationDate": 1e6,
-                    "wageDeadline": 1e6,
-                    "status": "unresolved",
-                    "resolutionDate": 1e6,
-                    "topic": "topic",
-                    "reputationTokenAddress": "0x3",
-                    "answer": null,
-                    "decodedPrediction": null,
-                    "reputaion": null,
-                    "options": ["1", "2"]
-                }
-            ]
-
+        let markets = db.collection("markets");
+        const firstMarketParams = {
+            "address": "0x1",
+            "question": "question",
+            "creationDate": 1e6,
+            "wageDeadline": 1e6,
+            "resolutionDate": 1e6,
+            "topic": "topic",
+            "reputationTokenAddress": "0x3",
+            "status": "resolved",
+            "answer": 9,
+            "decodedPrediction": 8,
+            "reputaion": 9.1,
+            "options": ["1", "2"],
+            "users": [{
+                "address": '0x',
+                "description": "hello",
+                "status": "subscribed",
+                "registrationDate": 1e6
+            }]
         }
 
-        await users.insertOne(userParams);
+        const secondMarketParams = {
+            "address": "0x1",
+            "question": "question",
+            "creationDate": 1e6,
+            "wageDeadline": 1e6,
+            "resolutionDate": 1e6,
+            "topic": "topic",
+            "reputationTokenAddress": "0x3",
+            "status": "resolved",
+            "answer": 9,
+            "decodedPrediction": 8,
+            "reputaion": 9.1,
+            "options": ["1", "2"],
+            "users": [{
+                "address": '0x',
+                "description": "hello",
+                "status": "subscribed",
+                "registrationDate": 1e6
+            }]
+        }
+
+        await markets.insertOne(firstMarketParams);
+
+        await markets.insertOne(secondMarketParams);
         const params = {
             "userAddress": "0x",
         }
@@ -73,8 +79,11 @@ describe('testing /users/{userAddress}/markets model', async function() {
                 db,
                 params
             )
-        )[0];
-        console.log(`results:${results}`)
+        );
+
+        const data = results["data"]
+        const meta = results["meta"]
+
         const fieldsToReturn = [
             'address',
             'question',
@@ -89,6 +98,9 @@ describe('testing /users/{userAddress}/markets model', async function() {
             'reputation',
             'correct'
         ]
-        expect(fieldsToReturn).to.eql(Object.keys(results));
+        expect(fieldsToReturn).to.eql(Object.keys(data[0]));
+        expect(meta['numObjects']).to.eql(2);
+        expect(meta['offset']).to.eql(0);
+        expect(meta['limit']).to.eql(10);
     })
 })

@@ -258,5 +258,8 @@ export const getUserStats = async(db, params) => {
         ).toArray()
     );
     aggregatedStats['chart'] = chartStats;
-    return aggregatedStats;
+    return {
+        "data": aggregatedStats,
+        "meta": {}
+    };
 }

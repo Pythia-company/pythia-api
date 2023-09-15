@@ -4,7 +4,7 @@ import {
     getMarket
 } from "../../../src/models/getMarket.js";
 
-describe('testing /markets  model', async function() {
+describe('testing /markets/{marketAddress} model', async function() {
 
     beforeEach(async function () {
         const markets = await db.collection("markets");
@@ -56,12 +56,14 @@ describe('testing /markets  model', async function() {
         const params = {
             "marketAddress": "0x",
         }
-        const results = (
+        const output = (
             await getMarket(
                 db,
                 params
             )
         );
+
+        const data = output['data']
 
         // validating fields
         const fieldToReturn = [
@@ -79,7 +81,7 @@ describe('testing /markets  model', async function() {
         ]
 
         expect(fieldToReturn).to.eql(
-            Object.keys(results)
+            Object.keys(data)
         )
     })
 })

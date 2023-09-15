@@ -2,7 +2,7 @@ import { validateFields } from "../../../src/controllers/getMarketController.js"
 
 import chai, { expect } from "chai";
 
-describe('testing validateFields in getMarketController', async function() {
+describe('testing markets/{marketAddress} controller', async function() {
 
     it('testing request validity', async function() {
         const validParams = {

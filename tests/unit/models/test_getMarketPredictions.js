@@ -1,10 +1,10 @@
 import chai, { expect } from "chai";
 import { dbTest as db} from "../../../src/models/mongo_setup.js";
 import { 
-    getMarkets
-} from "../../../src/models/getMarkets.js";
+    getMarketsPredictions
+} from "../../../src/models/getMarketsPredictions.js";
 
-describe('testing /markets model', async function() {
+describe('testing /marketsPredictions model', async function() {
 
     beforeEach(async function () {
         const markets = await db.collection("markets");
@@ -43,10 +43,14 @@ describe('testing /markets model', async function() {
             "question": "question",
             "users": [
                 {
-                    "address": "0x1"
+                    "address": "0x1",
+                    "encodedPrediction": "0x56",
+                    "predictionDate": 1e6 + 5
                 },
                 {
-                    "address": "0x2"
+                    "address": "0x2",
+                    "encodedPrediction": "0x57",
+                    "predictionDate": 1e6 + 5
                 }
             ]
 
@@ -54,10 +58,10 @@ describe('testing /markets model', async function() {
 
         await markets.insertOne(marketParams);
         const params = {
-            "createdAfter": 1e5,
+            "topic": ["defi"],
         }
         const results = (
-            await getMarkets(
+            await getMarketsPredictions(
                 db,
                 params
             )
@@ -67,23 +71,17 @@ describe('testing /markets model', async function() {
 
         // validating fields
         const fieldToReturn = [
-            "address",
-            "creationDate",
-            "wageDeadline",
-            "resolutionDate",
-            "status",
+            "user",
+            "market",
             "topic",
-            "reputationTokenAddress",
-            "options",
-            "question",
-            "answer",
-            "numOfPredictors"
+            "encodedPrediction",
+            "predictionDate"
         ]
 
         expect(fieldToReturn).to.eql(
             Object.keys(data[0])
         )
-        expect(meta['numObjects']).to.eql(1);
+        expect(meta['numObjects']).to.eql(2);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
     })

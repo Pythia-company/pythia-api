@@ -1,5 +1,5 @@
 export const getUsers = async(db, params) => {
-    const usersCollection = await db.collection("markets");
+    const marketsCollection = await db.collection("markets");
     
 
     let dateCondition = {}
@@ -19,7 +19,7 @@ export const getUsers = async(db, params) => {
     const resolvedCondition = {"status": "resolved"}
 
 
-    const aggregateQuery =  [
+    const pipeline =  [
         {
             $unwind: "$users"
         },
@@ -48,7 +48,9 @@ export const getUsers = async(db, params) => {
                         then: 1,
                         else: 0
                     }
-                }
+                },
+                limit: parseInt(params['limit'] || 10),
+                offset: parseInt(params['offset'] || 0)
             }
         },
         {
@@ -62,11 +64,22 @@ export const getUsers = async(db, params) => {
                 },
                 totalMarkets: {
                     $sum: 1
+                },
+                limit: {
+                    $max: "$limit",
+                },
+                offset: {
+                    $max: "$offset",
                 }
             }
-        },
+        }
+    ];
+
+    const dataPipeline = [
+        ...pipeline,
         {
             $project: {
+                _id: 0,
                 address: "$_id",
                 accuracy: {
                     $cond: {
@@ -105,8 +118,43 @@ export const getUsers = async(db, params) => {
         {
             $limit: parseInt(params['limit'] || 10)
         }
-    ];
-    return await usersCollection.aggregate(
-        aggregateQuery
-    ).toArray();
+    ]
+
+    const metaPipeline = [
+        ...pipeline,
+        { 
+            $group: {
+                _id: null,
+                numObjects: { 
+                    $sum: 1 
+                },
+                "limit": {$max: "$limit"},
+                "offset": {$max: "$offset"},
+            } 
+        },
+        {
+            $project: {
+                "_id": 0,
+                "limit": 1,
+                "offset": 1,
+                "numObjects": 1
+            }
+        }
+    ]
+
+    const data = await marketsCollection.aggregate(
+        [
+            {
+                $facet: {
+                    "data": dataPipeline,
+                    "meta": metaPipeline
+                }
+        
+            }
+        ]
+    ).toArray()
+    const output = {"data": [], "meta": {}}
+    output["data"] = data[0].data
+    output["meta"] = data[0].meta[0]
+    return output
 }

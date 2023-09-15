@@ -87,6 +87,6 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
             'reputation',
             'correct'
         ]
-        expect(fieldsToReturn).to.eql(Object.keys(results));
+        expect(fieldsToReturn).to.eql(Object.keys(results["data"]));
     })
 })

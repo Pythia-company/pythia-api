@@ -16,6 +16,6 @@ describe('testing /market/{marketAddress}/users enpoint', async function() {
             "reputation"
         ]
 
-        expect(Object.keys(responseData[0])).to.have.members(responseFields);
+        expect(Object.keys(responseData["data"][0])).to.have.members(responseFields);
     })
 })

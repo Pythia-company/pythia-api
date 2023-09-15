@@ -34,7 +34,6 @@ export const getMarketController = async(req, res) => {
             db,
             params
         );
-        console.log(`output:${output}`)
         if(output == null){
             return res.send({})
         }

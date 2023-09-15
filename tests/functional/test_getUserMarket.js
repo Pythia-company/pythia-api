@@ -16,6 +16,6 @@ describe('testing /users/{userAddress}/markets/{marketAddress} enpoint', async f
             "correct"
         ]
 
-        expect(Object.keys(responseData)).to.have.members(responseFields);
+        expect(Object.keys(responseData["data"])).to.have.members(responseFields);
     })
 })

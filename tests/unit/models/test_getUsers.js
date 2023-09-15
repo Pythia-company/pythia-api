@@ -7,7 +7,7 @@ import {
 describe('testing /users model', async function() {
 
     beforeEach(async function () {
-        const users = await db.collection("users");
+        const users = await db.collection("markets");
 
         await users.deleteMany(
             {}
@@ -16,7 +16,7 @@ describe('testing /users model', async function() {
     });
 
     afterEach(async function () {
-        const users = await db.collection("users");
+        const users = await db.collection("markets");
 
         await users.deleteMany(
             {}
@@ -26,73 +26,99 @@ describe('testing /users model', async function() {
   
     // test a functionality
     it('testing return fields', async function() {
-        let users = db.collection("users");
-        const userParams = {
-            "address": '0x',
-            "markets": [
-                {
-                    "address": "0x1",
-                    "resolutionDate": (
-                        Math.floor(Date.now() / 1000) - (
-                            30 *
-                            24 *
-                            3600
-                        )
+        let marketsCollection = db.collection("markets");
+        const marketsParams = [
+            {
+                "address": "0x1",
+                "resolutionDate": (
+                    Math.floor(Date.now() / 1000) - (
+                        30 *
+                        24 *
+                        3600
+                    )
 
-                    ),
-                    "topic": "defi",
-                    "resolved": true
-                },
-                {
-                    "address": "0x2",
-                    "resolutionDate": (
-                        Math.floor(Date.now() / 1000) - (
-                            60 *
-                            24 *
-                            3600
-                        )
+                ),
+                "topic": "defi",
+                "status": "resolved",
+                "answer": 1,
+                "users": [
+                    {
+                        "address": "0x",
+                        "encodedPrediction": "0x6",
+                        "decodedPrediction": 0
+                    }
+                ]
+            },
+            {
+                "address": "0x2",
+                "resolutionDate": (
+                    Math.floor(Date.now() / 1000) - (
+                        60 *
+                        24 *
+                        3600
+                    )
 
-                    ),
-                    "reputation": 10.0,
-                    "topic": "defi",
-                    "resolved": true
-                },
-                {
-                    "address": "0x3",
-                    "resolutionDate": (
-                        Math.floor(Date.now() / 1000) - (
-                            30 *
-                            24 *
-                            3600
-                        )
+                ),
+                "reputation": 10.0,
+                "topic": "defi",
+                "status": "resolved",
+                "answer": 0,
+                "users": [
+                    {
+                        "address": "0x",
+                        "encodedPrediction": "0x6",
+                        "decodedPrediction": 0
+                    }
+                ]
+            },
+            {
+                "address": "0x3",
+                "resolutionDate": (
+                    Math.floor(Date.now() / 1000) - (
+                        30 *
+                        24 *
+                        3600
+                    )
 
-                    ),
-                    "reputation": 10.0,
-                    "topic": "nft",
-                    "resolved": true
-                },
-                {
-                    "address": "0x4",
-                    "resolutionDate": (
-                        Math.floor(Date.now() / 1000) - (
-                            30 *
-                            24 *
-                            3600
-                        )
+                ),
+                "reputation": 10.0,
+                "topic": "nft",
+                "status": "resolved",
+                "answer": 0,
+                "users": [
+                    {
+                        "address": "0x",
+                        "encodedPrediction": "0x6",
+                        "decodedPrediction": 0
+                    }
+                ]
+            },
+            {
+                "address": "0x4",
+                "resolutionDate": (
+                    Math.floor(Date.now() / 1000) - (
+                        30 *
+                        24 *
+                        3600
+                    )
 
-                    ),
-                    "reputation": 10.0,
-                    "topic": "defi",
-                    "resolved": true
-                },
-            ]
-
-        }
-
-        await users.insertOne(userParams);
+                ),
+                "reputation": 10.0,
+                "topic": "defi",
+                "status": "resolved",
+                "answer": 2,
+                "users": [
+                    {
+                        "address": "0x",
+                        "encodedPrediction": "0x6",
+                        "decodedPrediction": 0
+                    }
+                ]
+            }
+        ]
+        await marketsCollection.insertMany(marketsParams);
         const params = {
             "topic": "defi",
-            // "periodDays": 30
         }
         const results = (
             await getUsers(
@@ -100,6 +126,9 @@ describe('testing /users model', async function() {
                 params
             )
         );
+
+        const data = results["data"]
+        const meta = results["meta"]
 
         // validating fields
         const fieldToReturn = [
@@ -109,7 +138,10 @@ describe('testing /users model', async function() {
         ]
 
         expect(fieldToReturn).to.eql(
-            Object.keys(results[0])
+            Object.keys(data[0])
         )
+        expect(meta['numObjects']).to.eql(1);
+        expect(meta['offset']).to.eql(0);
+        expect(meta['limit']).to.eql(10);
     })
 })

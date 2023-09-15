@@ -20,7 +20,7 @@ export const getUserMarket = async(db, params) => {
         }
     );
 
-    const results = (
+    let data = (
         await marketCollection.aggregate([
             { $unwind: "$users" },
             {
@@ -72,9 +72,9 @@ export const getUserMarket = async(db, params) => {
      ])
      .toArray()
      );
-
-     if(results.length === 0){
-        return {
+     
+     if(data.length === 0){
+        data = {
             'predictionDate': null,
             'encodedPrediction': null,
             'reputationCollectionDate': null,
@@ -82,7 +82,9 @@ export const getUserMarket = async(db, params) => {
             'reputation': null,
             'correct': null
         }
-    }else{
-        return results[0];
+    }
+    return {
+        "data": data,
+        "meta": {}
     }
 }

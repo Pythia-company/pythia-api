@@ -1,7 +1,7 @@
 export const getUser = async(db, params) => {
     const usersCollection = await db.collection("users");
 
-    return (
+    const data = (
         await usersCollection.aggregate([
         {
             $match: {
@@ -19,11 +19,15 @@ export const getUser = async(db, params) => {
                 description: { $ifNull: [ "$description", "null" ] },
                 status:1,
                 registrationDate: 1,
-                nextSubscriptionPayDate: { $ifNull: [ "$nextSubcriptionPayDate", "null" ] },
-                subscriptionAmountDue: { $ifNull: [ "$nextSubcriptionAmountDue", "null" ] },
+                nextSubcriptionPayDate: { $ifNull: [ "$nextSubcriptionPayDate", "null" ] },
+                nextSubcriptionAmountDue: { $ifNull: [ "$nextSubcriptionAmountDue", "null" ] },
             }
         }
         ])
         .toArray()
     )[0];
+    return {
+        "data": data,
+        "meta": {}
+    }
 }

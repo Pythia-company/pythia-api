@@ -70,9 +70,9 @@ export const getMarkets = async(db, params) => {
         params['sort']['numOfPredictors'] = 'asc'
     }
 
-    const aggregateQuery = []
+    const pipeline = []
     if(matchParams.length > 0){
-        aggregateQuery.push(
+        pipeline.push(
             {
                 $match: {
                     $and: matchParams
@@ -80,7 +80,9 @@ export const getMarkets = async(db, params) => {
             }
         )
     }
-    aggregateQuery.push(
+
+    const dataPipeline = [
+        ...pipeline,
         {
             $project: {
                 _id: 0,
@@ -120,12 +122,51 @@ export const getMarkets = async(db, params) => {
         {
             $limit: parseInt(params['limit'] || 10)
         }
-    )
+    ]
+
+    const metaPipeline = [
+        ...pipeline,
+        {
+            $addFields: {
+                "limit": parseInt(params['limit'] || 10),
+                "offset": parseInt(params['offset'] || 0),
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                numObjects: { 
+                    $sum: 1
+                },
+                "limit": {$max: "$limit"},
+                "offset": {$max: "$offset"},
+            } 
+        },
+        {
+            $project: {
+                "_id": 0,
+                "limit": 1,
+                "offset": 1,
+                "numObjects": 1
+            }
+        }
+    ]
 
 
 
-    const result = await marketsCollection.aggregate(
-        aggregateQuery
+    const data = await marketsCollection.aggregate(
+        [
+            {
+                $facet: {
+                    "data": dataPipeline,
+                    "meta": metaPipeline
+                }
+        
+            }
+        ]
     ).toArray()
-    return result;
+    const output = {"data": [], "meta": {}}
+    output["data"] = data[0].data
+    output["meta"] = data[0].meta[0]
+    return output
 }

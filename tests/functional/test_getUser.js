@@ -17,6 +17,6 @@ describe('testing /users/{userAddress} enpoint', async function() {
             "subscriptionAmountDue"
         ]
 
-        expect(Object.keys(responseData)).to.have.members(responseFields);
+        expect(Object.keys(responseData["data"])).to.have.members(responseFields);
     })
 })

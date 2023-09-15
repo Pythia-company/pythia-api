@@ -1,5 +1,5 @@
 export const getUserMarkets = async(db, params) => {
-    const usersCollection = await db.collection("markets");
+    const marketsCollection = await db.collection("markets");
 
     const sortOrder = (
         (
@@ -40,10 +40,7 @@ export const getUserMarkets = async(db, params) => {
         )
     }
 
-
-
-
-    return await usersCollection.aggregate([
+    const pipeline = [
         {
             $unwind: "$users"
         },
@@ -51,58 +48,105 @@ export const getUserMarkets = async(db, params) => {
             $match: {
                 $and: matchParams
             }
-        },
+        }
+    ]
+
+    const dataPipeline = [
+        ...pipeline,
         {
+            $project: {
+                 _id: 0,
+                 address: "$address",
+                 question: "$question",
+                 creationDate: "$creationDate",
+                 wageDeadline: "$wageDeadline",
+                 resolutionDate: "$resolutionDate",
+                 topic: "$topic",
+                 reputationTokenAddress: "$reputationTokenAddress",
+                 options: "$options",
+                 status: "$status",
+                 answer: {
+                     $cond: {
+                         if: { $ifNull: ['$answer', false] },
+                         then: "$answer",
+                         else: null
+                     },
+                 },
+                 reputation: {
+                     $cond: {
+                         if: { $ifNull: ['$users.reputation', false] },
+                         then: "$users.reputation",
+                         else: null
+                     },
+                 },
+                 correct: {
+                     $cond: {
+                         if: {
+                             $and: [
+                                 {$eq:["$users.decodedPrediction", "$answer"]},
+                                 { $ifNull: ['$users.decodedPrediction', false]}
+                             ]
+                         },
+                         then: true,
+                         else: false
+                     },
+                 }
+             }
+         },
+         {
             $sort: {
                 "users.predictionDate": sortOrder
             }
-        },
+         },
+         {
+            $skip: parseInt(params['offset'] || 0)
+         },
+         {
+            $limit: parseInt(params['limit'] || 10)
+         }
+    ]
+
+    const metaPipeline = [
+        ...pipeline,
         {
-           $project: {
-                _id: 0,
-                address: "$address",
-                question: "$question",
-                creationDate: "$creationDate",
-                wageDeadline: "$wageDeadline",
-                resolutionDate: "$resolutionDate",
-                topic: "$topic",
-                reputationTokenAddress: "$reputationTokenAddress",
-                options: "$options",
-                status: "$status",
-                answer: {
-                    $cond: {
-                        if: { $ifNull: ['$answer', false] },
-                        then: "$answer",
-                        else: null
-                    },
-                },
-                reputation: {
-                    $cond: {
-                        if: { $ifNull: ['$users.reputation', false] },
-                        then: "$users.reputation",
-                        else: null
-                    },
-                },
-                correct: {
-                    $cond: {
-                        if: {
-                            $and: [
-                                {$eq:["$users.decodedPrediction", "$answer"]},
-                                { $ifNull: ['$users.decodedPrediction', false]}
-                            ]
-                        },
-                        then: true,
-                        else: false
-                    },
-                }
+            $addFields: {
+                "limit": parseInt(params['limit'] || 10),
+                "offset": parseInt(params['offset'] || 0),
             }
         },
-        {
-            $skip: parseInt(params['offset'] || 0)
+        { 
+            $group: {
+                _id: null,
+                numObjects: { 
+                    $sum: 1 
+                },
+                "limit": {$max: "$limit"},
+                "offset": {$max: "$offset"},
+            } 
         },
         {
-            $limit: parseInt(params['limit'] || 10)
+            $project: {
+                "_id": 0,
+                "limit": 1,
+                "offset": 1,
+                "numObjects": 1
+            }
         }
-     ])
-     .toArray();
+    ]
+
+    const data = await marketsCollection.aggregate(
+        [
+            {
+                $facet: {
+                    "data": dataPipeline,
+                    "meta": metaPipeline
+                }
+        
+            }
+        ]
+    ).toArray()
+    const output = {"data": [], "meta": {}}
+    output["data"] = data[0].data
+    output["meta"] = data[0].meta[0]
+    return output
 }

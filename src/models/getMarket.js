@@ -38,8 +38,11 @@ export const getMarket = async(db, params) => {
             }
         }
     ]
-    const output =  (
+    const data =  (
         await marketsCollection.aggregate(aggregateParams).toArray()
     )[0]
-    return output
+    return {
+        "data": data,
+        "meta": {}
+    }
 }

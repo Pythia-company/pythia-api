@@ -4,7 +4,7 @@ import {
     getMarketUsers
 } from "../../../src/models/getMarketUsers.js";
 
-describe('testing /markets model', async function() {
+describe('testing /markets/users model', async function() {
 
     beforeEach(async function () {
         const users = await db.collection("users");
@@ -77,7 +77,9 @@ describe('testing /markets model', async function() {
                 db,
                 params
             )
-        )[0];
+        );
+        const data = results['data']
+        const meta = results['meta']
         const fieldsToReturn = [
             'address',
             'predictionDate',
@@ -86,6 +88,9 @@ describe('testing /markets model', async function() {
             'decodedPrediction',
             'reputation'
         ]
-        expect(fieldsToReturn).to.eql(Object.keys(results));
+        expect(fieldsToReturn).to.eql(Object.keys(data[0]));
+        expect(meta['numObjects']).to.eql(1);
+        expect(meta['offset']).to.eql(0);
+        expect(meta['limit']).to.eql(10);
     })
 })
