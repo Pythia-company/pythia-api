@@ -8,6 +8,7 @@ export const getMarkets = async(db, params) => {
     }
     const marketsCollection = await db.collection("markets");
     const matchParams = []
+    params.userAddress = params.userAddress || ""
 
 
     Object.entries(params).forEach(([parameter, value]) => {
@@ -78,22 +79,9 @@ export const getMarkets = async(db, params) => {
                     $and: matchParams
                 }
             },
-            {
-                $addFields: {
-                    payload: {
-                        predicted: {
-                            $cond: {
-                                if: { $in: [params.userAddress, "$users.address"]},
-                                then: true,
-                                else: false
-                            }
-                        }
-                    }
-                }
-            }
         )
     }
-
+  
     const dataPipeline = [
         ...pipeline,
         {
@@ -126,7 +114,11 @@ export const getMarkets = async(db, params) => {
                 },
                 payload: {
                     "predicted": {
-                        $cond: [{ $in: [params.userAddress, "$users.address"] }, true, false]
+                        $cond: [
+                            { $in: [params.userAddress.toLowerCase(), "$users.address"] },
+                            true,
+                            false
+                        ]
                     }
                 }
             }
