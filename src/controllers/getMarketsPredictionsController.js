@@ -35,8 +35,10 @@ export const getMarketsPredictionsController = async(req, res) => {
             db,
             params
         );
-        if(output == null){
-            return res.send([])
+        if(output === null){
+            res.status(404).send(
+                "no predictions exist for requested params"
+            )
         }
         return res.send(output);
     }else{

@@ -169,6 +169,7 @@ describe('testing /users/stats model', async function() {
         await userCollection.insertOne(userParams);
         await marketCollection.insertMany(marketsParams);
 
+        // valid params
         const params = {
             "topic": "defi",
             "userAddress": "0x"
@@ -188,5 +189,19 @@ describe('testing /users/stats model', async function() {
             "chart"
         ]
         expect(Object.keys(results['data'])).to.eql(fieldsToReturn)
+
+
+        // empty response
+        const emptyResponseParams = {
+            "topic": "defi",
+            "userAddress": "0xabc"
+        }
+        const emptyResults = (
+            await getUserStats(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults).to.eql(null);
     })
 })

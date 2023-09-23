@@ -53,8 +53,9 @@ describe('testing /markets/{marketAddress} model', async function() {
         }
 
         await markets.insertOne(marketParams);
+        // valid params
         const params = {
-            "marketAddress": "0x",
+            "marketAddress": "0X",
         }
         const output = (
             await getMarket(
@@ -83,5 +84,17 @@ describe('testing /markets/{marketAddress} model', async function() {
         expect(fieldToReturn).to.eql(
             Object.keys(data)
         )
+        
+        // empty response
+        const emptyResponseParams = {
+            "marketAddress": "0xabc"
+        }
+        const emptyResults = (
+            await getMarket(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults).to.eql(null);
     })
 })

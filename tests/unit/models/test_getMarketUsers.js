@@ -69,8 +69,10 @@ describe('testing /markets/users model', async function() {
         }
 
         await users.insertOne(userParams);
+
+        // valid params
         const params = {
-            "marketAddress": "0x1",
+            "marketAddress": "0X1",
         }
         const results = (
             await getMarketUsers(
@@ -92,5 +94,17 @@ describe('testing /markets/users model', async function() {
         expect(meta['numObjects']).to.eql(1);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
+
+        // empty response
+        const emptyResponseParams = {
+            "marketAddress": "0x10",
+        }
+        const emptyResults = (
+            await getMarketUsers(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults.data).to.eql([]);
     })
 })

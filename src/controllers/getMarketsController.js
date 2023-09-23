@@ -24,7 +24,10 @@ export const validateFields = async (params) => {
             numOfPredictors : Joi.string().valid("asc", "desc"),
         }),
         offset: Joi.number().integer().min(0),
-        limit: Joi.number().integer().min(0)
+        limit: Joi.number().integer().min(0),
+        userAddress: Joi.string().regex(
+            new RegExp('^0x([a-fA-F0-9]+)?$')
+        )
     });
     try {
        const value = await schema.validateAsync(params)
@@ -47,8 +50,12 @@ export const getMarketsController = async(req, res) => {
             db,
             params
         );
-        if(output == null){
-            return res.send([])
+        console.log("output for markets/")
+        console.log(console.log(JSON.stringify(output['data'][0], null, 4)));
+        if(output === null){
+            res.status(404).send(
+                "markets with requested params do not exist"
+            )
         }
         return res.send(output);
     }else{

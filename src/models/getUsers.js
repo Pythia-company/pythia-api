@@ -16,7 +16,7 @@ export const getUsers = async(db, params) => {
         $gt: ["$users.reputation", 0]
     }
 
-    const resolvedCondition = {"status": "resolved"}
+    // const resolvedCondition = {"status": "resolved"}
 
 
     const pipeline =  [
@@ -25,7 +25,7 @@ export const getUsers = async(db, params) => {
         },
         {
             $match: {
-                $and: [resolvedCondition, dateCondition, topicCondition]
+                $and: [dateCondition, topicCondition]
             }
         },
         {
@@ -38,15 +38,21 @@ export const getUsers = async(db, params) => {
                     }
                 },
                 correctMarkets: {
-                    $cond: { 
-                        if: {
-                            $eq: [
-                                "$users.decodedPrediction",
-                                "$answer"
-                            ]
-                        },
-                        then: 1,
-                        else: 0
+                    $cond: {
+                        if: { $ifNull: ['$answer', true] },
+                        then: 0,
+                        else: {
+                          $cond: {
+                            if: { 
+                                $eq: [
+                                    "$users.decodedPrediction",
+                                    "$answer"
+                                ]
+                            },
+                            then: 1,
+                            else: 0
+                          }
+                        }
                     }
                 },
                 limit: parseInt(params['limit'] || 10),
@@ -153,6 +159,12 @@ export const getUsers = async(db, params) => {
             }
         ]
     ).toArray()
+    if(data[0].data.length === 0){
+        return {
+            "data": [],
+            "meta": {}
+        }
+    }
     const output = {"data": [], "meta": {}}
     output["data"] = data[0].data
     output["meta"] = data[0].meta[0]

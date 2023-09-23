@@ -11,7 +11,7 @@ export const getMarkets = async(db, params) => {
 
 
     Object.entries(params).forEach(([parameter, value]) => {
-        if(parameter === "topic"){
+        if(parameter === "topics"){
             matchParams.push(
                 {
                     "topic" : {
@@ -77,6 +77,19 @@ export const getMarkets = async(db, params) => {
                 $match: {
                     $and: matchParams
                 }
+            },
+            {
+                $addFields: {
+                    payload: {
+                        predicted: {
+                            $cond: {
+                                if: { $in: [params.userAddress, "$users.address"]},
+                                then: true,
+                                else: false
+                            }
+                        }
+                    }
+                }
             }
         )
     }
@@ -110,6 +123,11 @@ export const getMarkets = async(db, params) => {
                         },
                         else: 0
                     },
+                },
+                payload: {
+                    "predicted": {
+                        $cond: [{ $in: [params.userAddress, "$users.address"] }, true, false]
+                    }
                 }
             }
         },
@@ -166,6 +184,12 @@ export const getMarkets = async(db, params) => {
         ]
     ).toArray()
     const output = {"data": [], "meta": {}}
+    if(data[0].data.length === 0){
+        return {
+            "data": [],
+            "meta": {}
+        }
+    }
     output["data"] = data[0].data
     output["meta"] = data[0].meta[0]
     return output

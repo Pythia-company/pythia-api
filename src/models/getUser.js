@@ -7,7 +7,12 @@ export const getUser = async(db, params) => {
             $match: {
                 $and: [
                     {
-                        "address": params.userAddress
+                        $expr: {
+                            $eq: [
+                              { $toLower: "$address" },
+                              params.userAddress.toLowerCase()
+                            ]
+                        }
                     }
                 ]
             }
@@ -25,9 +30,12 @@ export const getUser = async(db, params) => {
         }
         ])
         .toArray()
-    )[0];
+    );
+    if(data.length === 0){
+        return null
+    }
     return {
-        "data": data,
+        "data": data[0],
         "meta": {}
     }
 }

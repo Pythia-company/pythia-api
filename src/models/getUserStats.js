@@ -37,7 +37,12 @@ export const getUserStats = async(db, params) => {
         },
         {
             $match: {
-                "users.address": params.userAddress
+                $expr: {
+                    $eq: [
+                        { $toLower: "$users.address" },
+                        params.userAddress.toLowerCase()
+                    ]
+                }
             }
         },
         {

@@ -34,8 +34,10 @@ export const getMarketController = async(req, res) => {
             db,
             params
         );
-        if(output == null){
-            return res.send({})
+        if(output === null){
+            res.status(404).send(
+                "market with requested params do not exist"
+            )
         }
         res.send(output);
     }else{

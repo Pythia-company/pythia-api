@@ -13,7 +13,12 @@ export const getUserMarkets = async(db, params) => {
     const matchParams = [];
     matchParams.push(
         {
-            "users.address": params.userAddress
+            $expr: {
+                $eq: [
+                  { $toLower: "$users.address" },
+                  params.userAddress.toLowerCase()
+                ]
+            }
         }
     );
     if(params['topics'] != null){
@@ -146,6 +151,12 @@ export const getUserMarkets = async(db, params) => {
         ]
     ).toArray()
     const output = {"data": [], "meta": {}}
+    if(data[0].data.length === 0){
+        return {
+            "data": [],
+            "meta": {}
+        }
+    }
     output["data"] = data[0].data
     output["meta"] = data[0].meta[0]
     return output

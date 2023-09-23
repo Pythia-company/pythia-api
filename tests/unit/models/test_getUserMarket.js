@@ -69,6 +69,7 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
         }
 
         await users.insertOne(userParams);
+        // valid params
         const params = {
             "userAddress": "0x",
             "marketAddress": "0x2"
@@ -81,12 +82,14 @@ describe('testing /users/{userAddress}/market/{marketAddress} model', async func
         );
         const fieldsToReturn = [
             'predictionDate',
+            'predictionTransactionHash',
             'encodedPrediction',
             'reputationCollectionDate',
             'decodedPrediction',
             'reputation',
             'correct'
         ]
+        console.log(`user/market: ${JSON.stringify(results, null, 4)}`)
         expect(fieldsToReturn).to.eql(Object.keys(results["data"]));
     })
 })

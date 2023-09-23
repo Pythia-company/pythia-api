@@ -2,9 +2,14 @@ export const getMarket = async(db, params) => {
     const marketsCollection = await db.collection("markets");
 
     const aggregateParams = [
-        {
+        {   
             $match: {
-                address: params.marketAddress
+                $expr: {
+                    $eq: [
+                      { $toLower: "$address" },
+                      params.marketAddress.toLowerCase()
+                    ]
+                }
             }
         },
         {
@@ -40,9 +45,12 @@ export const getMarket = async(db, params) => {
     ]
     const data =  (
         await marketsCollection.aggregate(aggregateParams).toArray()
-    )[0]
+    )
+    if(data.length === 0){
+        return null
+    }
     return {
-        "data": data,
+        "data": data[0],
         "meta": {}
     }
 }

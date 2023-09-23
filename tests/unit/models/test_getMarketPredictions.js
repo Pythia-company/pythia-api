@@ -57,6 +57,7 @@ describe('testing /marketsPredictions model', async function() {
         }
 
         await markets.insertOne(marketParams);
+        // valid params
         const params = {
             "topic": ["defi"],
         }
@@ -84,5 +85,17 @@ describe('testing /marketsPredictions model', async function() {
         expect(meta['numObjects']).to.eql(2);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
+
+        // empty response
+        const emptyResponseParams = {
+            "topic": ["trading"]
+        }
+        const emptyResults = (
+            await getMarketsPredictions(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults.data).to.eql([]);
     })
 })

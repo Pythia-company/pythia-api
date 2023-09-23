@@ -117,6 +117,8 @@ describe('testing /users model', async function() {
             }
         ]
         await marketsCollection.insertMany(marketsParams);
+
+        // valid params
         const params = {
             "topic": "defi",
         }
@@ -143,5 +145,17 @@ describe('testing /users model', async function() {
         expect(meta['numObjects']).to.eql(1);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
+
+        // empty response
+        const emptyResponseParams = {
+            "topic": "trading"
+        }
+        const emptyResults = (
+            await getUsers(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults.data).to.eql([]);
     })
 })

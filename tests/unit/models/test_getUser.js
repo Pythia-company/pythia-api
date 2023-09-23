@@ -38,8 +38,10 @@ describe('testing /users/{userAddress} model', async function() {
         }
 
         await users.insertOne(userParams);
+
+        // valid params
         const params = {
-            "userAddress": "0x",
+            "userAddress": "0X",
         }
         const results = (
             await getUser(
@@ -56,5 +58,17 @@ describe('testing /users/{userAddress} model', async function() {
             "nextSubcriptionAmountDue"
         ]
         expect(fieldsToReturn).to.eql(Object.keys(results["data"]));
+
+        // empty response
+        const emptyResponseParams = {
+            "userAddress": "0xabc"
+        }
+        const emptyResults = (
+            await getUser(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults).to.eql(null);
     })
 })

@@ -27,32 +27,36 @@ describe('testing /markets model', async function() {
     // test a functionality
     it('testing return fields', async function() {
         let markets = db.collection("markets");
-        const marketParams = {
-            "address": '0x',
-            "creationDate": 1e6,
-            "wageDeadline": 1e6 + 10,
-            "resolutionDate": 1e6 + 20,
-            "status": "inprogress",
-            "topic": "defi",
-            "reputationTokenAddress": "0x",
-            "options": [
-                "option1",
-                "option2",
-                "option3"
-            ],
-            "question": "question",
-            "users": [
-                {
-                    "address": "0x1"
-                },
-                {
-                    "address": "0x2"
-                }
-            ]
+        const marketParams = [
+            {
+                "address": '0x',
+                "creationDate": 1e6,
+                "wageDeadline": 1e6 + 10,
+                "resolutionDate": 1e6 + 20,
+                "status": "inprogress",
+                "topic": "defi",
+                "reputationTokenAddress": "0x",
+                "options": [
+                    "option1",
+                    "option2",
+                    "option3"
+                ],
+                "question": "question",
+                "users": [
+                    {
+                        "address": "0x1"
+                    },
+                    {
+                        "address": "0x2"
+                    }
+                ]
 
-        }
+            }
+        ]
 
-        await markets.insertOne(marketParams);
+        await markets.insertMany(marketParams);
+
+        // valid request params
         const params = {
             "createdAfter": 1e5,
         }
@@ -76,9 +80,11 @@ describe('testing /markets model', async function() {
             "reputationTokenAddress",
             "options",
             "question",
+            "payload",
             "answer",
-            "numOfPredictors"
+            "numOfPredictors",
         ]
+        console.log(data)
 
         expect(fieldToReturn).to.eql(
             Object.keys(data[0])
@@ -86,5 +92,18 @@ describe('testing /markets model', async function() {
         expect(meta['numObjects']).to.eql(1);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
+
+
+        // empty response
+        const emptyResponseParams = {
+            "topics": ["trading"]
+        }
+        const emptyResults = (
+            await getMarkets(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults.data).to.eql([]);
     })
 })

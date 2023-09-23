@@ -30,8 +30,10 @@ export const getUserController = async(req, res) => {
     const paramsValid = await validateFields(params);
     if(paramsValid){
         const output = await getUser(db, params);
-        if(output == null){
-            return res.send({});
+        if(output === null){
+            res.status(404).send(
+                "user does not exist for requested params"
+            )
         }
         return res.send(output);
     }else{

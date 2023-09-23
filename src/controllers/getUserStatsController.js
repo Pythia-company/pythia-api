@@ -34,8 +34,10 @@ export const getUserStatsController = async(req, res) => {
 
     if(paramsValid){
         const output = await getUserStats(db, params);
-        if(output == null){
-            return res.send({});
+        if(output === null){
+            res.status(404).send(
+                "no stats exist for user with requested params"
+            )
         }
         return res.send(output);
     }else{

@@ -71,6 +71,7 @@ describe('testing /users/{userAddress}/markets model', async function() {
         await markets.insertOne(firstMarketParams);
 
         await markets.insertOne(secondMarketParams);
+        // valid params
         const params = {
             "userAddress": "0x",
         }
@@ -102,5 +103,17 @@ describe('testing /users/{userAddress}/markets model', async function() {
         expect(meta['numObjects']).to.eql(2);
         expect(meta['offset']).to.eql(0);
         expect(meta['limit']).to.eql(10);
+
+        // empty response
+        const emptyResponseParams = {
+            "userAddress": "0xabc"
+        }
+        const emptyResults = (
+            await getUserMarkets(
+                db,
+                emptyResponseParams
+            )
+        );
+        expect(emptyResults.data).to.eql([]);
     })
 })

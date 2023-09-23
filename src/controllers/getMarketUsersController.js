@@ -30,8 +30,10 @@ export const getMarketUsersController = async(req, res) => {
     const paramsValid = await validateFields(params);
     if(paramsValid){
         const output = await getMarketUsers(db, params);
-        if(output == null){
-            return res.send([]);
+        if(output === null){
+            res.status(404).send(
+                "no users exist for requested params"
+            )
         }
         return res.send(output);
     }else{

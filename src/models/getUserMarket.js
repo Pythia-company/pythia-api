@@ -13,10 +13,20 @@ export const getUserMarket = async(db, params) => {
     const matchParams = [];
     matchParams.push(
         {
-            "address": params.marketAddress
+            $expr: {
+                $eq: [
+                  { $toLower: "$address" },
+                  params.marketAddress.toLowerCase()
+                ]
+            }
         },
         {
-            "users.address": params.userAddress
+            $expr: {
+                $eq: [
+                  { $toLower: "$users.address" },
+                  params.userAddress.toLowerCase()
+                ]
+            }
         }
     );
 
@@ -32,6 +42,13 @@ export const getUserMarket = async(db, params) => {
             $project: {
                     _id: 0,
                     predictionDate: "$users.predictionDate",
+                    predictionTransactionHash: {
+                        $cond: {
+                            if: { $ifNull: ["$users.predictionTransactionHash", false] },
+                            then: "$users.predictionTransactionHash",
+                            else: null
+                        }
+                    },
                     encodedPrediction: "$users.encodedPrediction",
                     reputationCollectionDate: {
                         $cond: {
@@ -69,22 +86,26 @@ export const getUserMarket = async(db, params) => {
 
                 }
             }
-     ])
-     .toArray()
-     );
+        ])
+        .toArray()
+    );
+
      
-     if(data.length === 0){
-        data = {
+    if(data.length === 0){
+        data = [
+            {
             'predictionDate': null,
+            "predictionTransactionHash": null,
             'encodedPrediction': null,
             'reputationCollectionDate': null,
             'decodedPrediction': null,
             'reputation': null,
             'correct': null
-        }
+            }
+        ]
     }
     return {
-        "data": data,
+        "data": data[0],
         "meta": {}
     }
 }
