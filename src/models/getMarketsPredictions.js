@@ -87,7 +87,11 @@ export const getMarketsPredictions = async(db, params) => {
     if(data[0].data.length === 0){
         return {
             "data": [],
-            "meta": {}
+            "meta": {
+                "limit": limit,
+                "offset": offset,
+                "numObjects": 0
+            }
         }
     }
     output["data"] = data[0].data

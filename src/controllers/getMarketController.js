@@ -38,8 +38,9 @@ export const getMarketController = async(req, res) => {
             res.status(404).send(
                 "market with requested params do not exist"
             )
+        }else{
+            res.send(output);
         }
-        res.send(output);
     }else{
         res.status(400).send("wrong request format")
     };

@@ -2,14 +2,13 @@ export const getUserStats = async(db, params) => {
     const marketsCollection = await db.collection("markets");
     const usersCollection = await db.collection("users");
 
-    let minPeriod = null
+    const minDate = Math.floor(Date.now() / 1000) - 365 * 24 * 3600
     let periodDaysCondition = {}
     if(params['periodDays'] == null){
-        minPeriod = Math.floor(Date.now() / 1000) - 180 * 24 * 3600
         periodDaysCondition = {
             $gte: [
                 "$resolutionDate",
-                Math.floor(Date.now() / 1000) - 180 * 24 * 3600
+                minDate
             ]
         }
     }else{
@@ -134,30 +133,23 @@ export const getUserStats = async(db, params) => {
                 _id: 0,
                 address: "$_id",
                 percentile: {
-                    $toInt: {
-                        $multiply: [
-                            100,
-                            {
-                                $subtract: [
-                                    1,
-                                    {
-                                        $cond: {
-                                            if: {
-                                                $gt: [numUsers, 0]
-                                            },
-                                            then: {
-                                                $divide: [
-                                                    "$rank",
-                                                    numUsers
-                                                ]
-                                            },
-                                            else:0
-                                        }
-                                    }
-                                ]
+                    $subtract: [
+                        1,
+                        {
+                            $cond: {
+                                if: {
+                                    $gt: [numUsers, 0]
+                                },
+                                then: {
+                                    $divide: [
+                                        "$rank",
+                                        numUsers
+                                    ]
+                                },
+                                else:0
                             }
-                        ]
-                    }
+                        }
+                    ]
                 },
                 accuracy: {
                     $cond: { 
@@ -203,7 +195,7 @@ export const getUserStats = async(db, params) => {
                     },
                     {
                         "resolutionDate": {
-                            $gte: minPeriod
+                            $gte: minDate
                         }
                     }
                 ]
@@ -254,9 +246,11 @@ export const getUserStats = async(db, params) => {
                 },
                 value: "$reputation"
             }
+        },
+        {
+            $sort:{key:1}
         }
     ]
-
     const chartStats = (
         await marketsCollection.aggregate(
             chartsQuery

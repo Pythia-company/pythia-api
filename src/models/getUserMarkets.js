@@ -30,17 +30,26 @@ export const getUserMarkets = async(db, params) => {
             }
         )
     }
-    if(params['resolved'] == true){
+    if(params['resolved'] === 'true'){
         matchParams.push(
             {
                 "status": "resolved"
             }
         )
     }
-    if(params['receivedReward'] != null){
+
+    if(params['receivedReward'] === 'true'){
         matchParams.push(
             {
                 "users.reputation": {$ne : null}
+            }
+        )
+    }else if(
+        params['receivedReward'] === 'false'
+    ){
+        matchParams.push(
+            {
+                "users.reputation": null
             }
         )
     }

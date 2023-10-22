@@ -38,8 +38,9 @@ export const getUserStatsController = async(req, res) => {
             res.status(404).send(
                 "no stats exist for user with requested params"
             )
+        }else{
+            res.send(output);
         }
-        return res.send(output);
     }else{
         res.status(400).send("wrong request format")
     };

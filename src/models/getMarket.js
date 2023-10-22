@@ -24,13 +24,7 @@ export const getMarket = async(db, params) => {
                 reputationTokenAddress:1,
                 options: 1,
                 status: 1,
-                answer: {
-                    $cond: {
-                        if: { $ifNull: ['$answer', false] },
-                        then: "$answer",
-                        else: null
-                    },
-                },
+                answer: 1,
                 numOfPredictors: {
                     $cond: {
                         if: { $ifNull: ['$users', false] },

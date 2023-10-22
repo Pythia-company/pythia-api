@@ -39,7 +39,7 @@ export const getUsers = async(db, params) => {
                 },
                 correctMarkets: {
                     $cond: {
-                        if: { $ifNull: ['$answer', true] },
+                        if: { $eq: [{ $ifNull: ["$answer", null] }, null] },
                         then: 0,
                         else: {
                           $cond: {
@@ -55,6 +55,13 @@ export const getUsers = async(db, params) => {
                         }
                     }
                 },
+                totalResolvedMarkets: {
+                    $cond: {
+                        if: {$eq: ["$status", "resolved"]},
+                        then: 1,
+                        else: 0
+                    }
+                },
                 limit: parseInt(params['limit'] || 10),
                 offset: parseInt(params['offset'] || 0)
             }
@@ -68,8 +75,8 @@ export const getUsers = async(db, params) => {
                 reputation: {
                     $sum: "$reputation"
                 },
-                totalMarkets: {
-                    $sum: 1
+                totalResolvedMarkets: {
+                    $sum: "$totalResolvedMarkets"
                 },
                 limit: {
                     $max: "$limit",
@@ -89,18 +96,10 @@ export const getUsers = async(db, params) => {
                 address: "$_id",
                 accuracy: {
                     $cond: {
-                        if: {$eq: ["$totalMarkets", 0]},
+                        if: {$eq: ["$totalResolvedMarkets", 0]},
                         then: 0,
                         else:  {
-                            $round: [
-                                {
-                                    $multiply: [
-                                        {$divide: ["$correctMarkets", "$totalMarkets"]},
-                                        100
-                                    ]
-                                },
-                                2     
-                            ]
+                            $divide: ["$correctMarkets", "$totalResolvedMarkets"]
                         }
                     }
                 },
@@ -162,7 +161,11 @@ export const getUsers = async(db, params) => {
     if(data[0].data.length === 0){
         return {
             "data": [],
-            "meta": {}
+            "meta": {
+                "numObjects": 0,
+                "limit": parseInt(params['limit'] || 10),
+                "offset": parseInt(params['offset'] || 0)
+            }
         }
     }
     const output = {"data": [], "meta": {}}

@@ -12,7 +12,7 @@ debug:
 	pythia.api.v1:latest
 prod:
 	docker build -t pythia.api.v1 . && \
-	docker run --rm -p 8888:8888 \
+	docker run -p 8888:8888 \
 	--network docker-network \
 	--name pythia.api \
 	-d \

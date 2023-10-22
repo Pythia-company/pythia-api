@@ -56,8 +56,9 @@ export const getMarketsController = async(req, res) => {
             res.status(404).send(
                 "markets with requested params do not exist"
             )
+        }else{
+            res.send(output);
         }
-        return res.send(output);
     }else{
         res.status(400).send(
             "invalid parameters for /markets enpoint"

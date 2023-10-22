@@ -179,7 +179,11 @@ export const getMarkets = async(db, params) => {
     if(data[0].data.length === 0){
         return {
             "data": [],
-            "meta": {}
+            "meta": {
+                "limit": parseInt(params['limit'] || 10),
+                "offset": parseInt(params['offset'] || 0),
+                "numObjects": 0
+            }
         }
     }
     output["data"] = data[0].data

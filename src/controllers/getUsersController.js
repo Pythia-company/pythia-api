@@ -35,8 +35,9 @@ export const getUsersController = async(req, res) => {
             res.status(404).send(
                 "no users exist for requested params"
             )
+        }else{
+            res.send(output);
         }
-        return res.send(output);
     }else{
         res.status(400).send("wrong request format")
     };
